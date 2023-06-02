@@ -1,6 +1,14 @@
 import pytest
 
+from kultimate.utils import ProcessYaml
 
-def test_valid_yaml():
+
+@pytest.fixture
+def yaml():
+    return ProcessYaml()
+
+
+def test_valid_yaml(yaml):
     """Determina si el yaml es válido"""
-    assert True == False
+    yaml.set_path("todo.yml")
+    assert len(yaml.json_dir["stages"]) == 5

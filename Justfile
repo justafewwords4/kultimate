@@ -9,3 +9,6 @@ publish:
 
 shell:
   poetry shell
+
+yaml:
+  poetry run python kultimate/utils/process_yaml.py

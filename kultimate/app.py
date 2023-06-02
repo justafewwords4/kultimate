@@ -1,10 +1,8 @@
-######## Textual imports ######
 from textual.app import App
 
 from .screens import KanbanBoard, Main, SelectFile
 
 
-###### Main Class ########
 class KULTIMATE(App):
     """The main app class"""
 
