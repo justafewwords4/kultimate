@@ -8,8 +8,11 @@ from ..widgets import BoardContainer
 class KanbanBoard(Screen):
     """Screen for Boards"""
 
-    app.TITLE = "Estamos en la pantalla Tablero"
-    app.SUB_TITLE = "Sí, estamos en la pantalla tablero"
+    TITLE = "Estamos en la pantalla Tablero"
+    SUB_TITLE = "Sí, estamos en la pantalla tablero"
+    BINDINGS = [
+        ("ctrl+q", "app.pop_screen()", "Quit"),
+    ]
 
     def compose(self) -> ComposeResult:
         yield Header()

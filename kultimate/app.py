@@ -23,6 +23,11 @@ class KULTIMATE(App):
         """Mount Main screen"""
         self.push_screen("main")
 
+    def set_title(self, title: str, sub_title: str = "") -> None:
+        """Change TITLE and SUB_TITLE"""
+        self.TITLE = title
+        self.SUB_TITLE = sub_title
+
 
 def main() -> None:
     KULTIMATE().run()
