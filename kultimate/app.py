@@ -21,6 +21,7 @@ class KULTIMATE(App):
 
     home_user = Path.home()
     home_directory = "Dropbox/kanban2"
+    is_visible = False
 
     def set_title(self, title: str, sub_title: str = "") -> None:
         """Change TITLE and SUB_TITLE"""
@@ -37,6 +38,11 @@ class KULTIMATE(App):
         """Toggle class for Directory"""
         directory = self.query_one(Directory)
         directory.toggle_class("_visible")
+        self.is_visible = not self.is_visible
+        if self.is_visible:
+            self.set_focus(directory)
+        else:
+            self.set_focus(None)
 
 
 def main() -> None:

@@ -3,7 +3,7 @@ from textual.widgets import DirectoryTree
 
 # DONE: Aparecer y desaparecer el elemento Directory
 # TODO: Aplicar estilos a Directory
-# TODO: Perder el foco cuando se oculte el widget
+# DONE: Perder el foco cuando se oculte el widget
 
 
 class Directory(DirectoryTree):
