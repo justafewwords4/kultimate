@@ -7,11 +7,12 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-textual = {extras = ["dev"], version = "^0.27.0"}
+textual = { extras = ["dev"], version = "^0.27.0" }
 pyyaml = "^6.0"
+typer = { extras = ["all"], version = "^0.9.0" }
 
 [tool.poetry.scripts]
-kultimate="kultimate.app:main"
+kultimate = "kultimate.utils.app_config:run"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.3.1"

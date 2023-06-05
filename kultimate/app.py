@@ -5,9 +5,6 @@ from textual.widgets import Footer, Header
 
 from .widgets import Directory, Stage, StagesContainer
 
-# DONE: moverme entre stages, con las letras l left y h, right. Ya va
-# funcionando, más o menos, pero tiene un comportamiento.
-
 
 class KULTIMATE(App):
     """The main app class"""
@@ -24,11 +21,17 @@ class KULTIMATE(App):
     ]
 
     home_user = Path.home()
-    home_directory = "Dropbox/kanban2"
+    # home_directory = "Dropbox/kanban2"
     is_directory_visible = False
     total_stages = 0
     actual_stage = 0
     actual_class = "_actual"
+
+    def __init__(self, path: str) -> None:
+        """init kultimate"""
+        self.home_directory = path
+        self.SUB_TITLE = path
+        super().__init__()
 
     async def on_key(self) -> None:
         await self.mount(StagesContainer())
@@ -46,7 +49,7 @@ class KULTIMATE(App):
         first = Stage(classes=self.actual_class)
         yield Header()
         with StagesContainer():
-            yield Directory(f"{self.home_user}/{self.home_directory}")
+            yield Directory(self.home_directory)
             yield first
             yield Stage()
             yield Stage()
@@ -97,5 +100,5 @@ class KULTIMATE(App):
         self.scroll_and_focus()
 
 
-def main() -> None:
-    KULTIMATE().run()
+def main(path: str) -> None:
+    KULTIMATE(path).run()
