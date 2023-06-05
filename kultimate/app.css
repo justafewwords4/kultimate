@@ -1,5 +1,6 @@
 Directory {
   dock: left;
+  display: none;
   offset-x: -100%;
   max-width: 40;
   height: 100%;
@@ -8,4 +9,22 @@ Directory {
 
 Directory._visible {
   offset-x: 0;
+  display: block;
+}
+
+Stage {
+  min-width: 30;
+  max-width: 40;
+  height: 100%;
+  border: panel $primary;
+  color: $secondary;
+}
+
+Stage._actual {
+  border: panel $secondary;
+  color: $primary;
+}
+
+StagesContainer {
+  height: 100%;
 }
