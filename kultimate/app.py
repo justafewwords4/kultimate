@@ -26,6 +26,7 @@ class KULTIMATE(App):
     total_stages = 0
     actual_stage = 0
     actual_class = "_actual"
+    actual_file = ""
 
     def __init__(self, path: str) -> None:
         """init kultimate"""
@@ -98,6 +99,11 @@ class KULTIMATE(App):
         self.list_stages[self.actual_stage].add_class(self.actual_class)
 
         self.scroll_and_focus()
+
+    #### File selected
+    def on_directory_tree_file_selected(self, event: Directory.FileSelected) -> None:
+        event.stop()
+        self.actual_file = str(event.path)
 
 
 def main(path: str) -> None:
