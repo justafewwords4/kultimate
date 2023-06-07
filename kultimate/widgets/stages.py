@@ -1,10 +1,10 @@
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.containers import Vertical
+from textual.containers import VerticalScroll
 from textual.reactive import reactive
 
 
-class Stage(Vertical):
+class Stage(VerticalScroll):
     """Columnas del tablero"""
 
     title = ""

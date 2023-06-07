@@ -6,3 +6,7 @@
 - TODO: Convertir html a markdown al grabar
 - DONE: Crear las columnas al cambiar de archivo
   usar mount y remove
+- TODO: crear el widget para las tareas
+- DONE: ¿Por qué se "dispara" el scroll horizontal, si no estoy agregando
+  nuevos elementos? R: Cada que se cargaba un nuevo archivo se montaba un
+  StageContainer por cada columna

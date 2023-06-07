@@ -53,19 +53,21 @@ class KULTIMATE(App):
     def get_total_stages(self) -> None:
         try:
             self.list_stages = self.query(Stage)
-            # self.list_stages.first().focus()
             self.list_stages.first().add_class(self.class_stage_is_visible)
-            # Establece la primer columna como la actual
             self.current_stage = 0
-            # self.list_stages.first().scroll_visible()
             self.total_stages = len(self.list_stages) - 1
-            # self.stages_container = self.query("#stages_container").first()
             self.scroll_and_focus()
+            ## Borrar después
         except:
             pass
 
     async def on_key(self) -> None:
-        await self.mount(StagesContainer())
+        try:
+            stages_container = self.query_one(StagesContainer)
+            if not stages_container:
+                await self.mount(StagesContainer())
+        except:
+            pass
         # self.get_total_stages()
 
     def set_title(self, title: str, sub_title: str = "") -> None:
@@ -87,11 +89,18 @@ class KULTIMATE(App):
         """Move scroll and focus a stage"""
         # DONE: Cambiar el foco al stage seleccionado
         self.list_stages[self.current_stage].focus()
-        self.list_stages[self.current_stage].scroll_visible()
+        self.query("#stages_container")[0].scroll_visible(
+            self.list_stages[self.current_stage]
+        )
+        # self.list_stages[self.current_stage].scroll_visible()
 
     def write_right(self) -> None:
-        with open("/home/felipe/Dropbox/kanban2/right.txt", "a") as ff:
-            ff.write(f"{self.current_stage}\n")
+        try:
+            if self.total_containers:
+                with open("/home/felipe/Dropbox/kanban2/stages.txt", "a") as ff:
+                    ff.write(f"{len(self.total_containers)}\n")
+        except:
+            pass
 
     def action_go_to_right(self) -> None:
         """Go right stage"""
@@ -112,6 +121,7 @@ class KULTIMATE(App):
 
     def action_go_to_left(self) -> None:
         """Go left stage"""
+
         if len(self.list_stages):
             self.list_stages[self.current_stage].remove_class(
                 self.class_stage_is_visible
