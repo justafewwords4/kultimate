@@ -7,6 +7,8 @@ from textual.widgets import Footer, Header
 from .utils import ParserMarkdown
 from .widgets import Directory, Stage, StagesContainer
 
+# DONE: Hay errores al navegar entre las columnas.
+
 
 class KULTIMATE(App):
     """The main app class"""
@@ -26,8 +28,8 @@ class KULTIMATE(App):
     # home_directory = "Dropbox/kanban2"
     is_directory_visible = False
     total_stages = 0
-    actual_stage = 0
-    actual_class = "_actual"
+    current_stage = 0
+    class_stage_is_visible = "_actual"
     actual_file = var("")
 
     def __init__(self, path: str) -> None:
@@ -38,8 +40,8 @@ class KULTIMATE(App):
 
     def compose(self) -> ComposeResult:
         yield Header()
-        with StagesContainer():
-            yield Directory(self.home_directory)
+        with StagesContainer(id="stages_container"):
+            yield Directory(self.home_directory, id="directory")
         yield Footer()
 
     # observar la variable self.actual_file
@@ -51,15 +53,20 @@ class KULTIMATE(App):
     def get_total_stages(self) -> None:
         try:
             self.list_stages = self.query(Stage)
-            self.list_stages.first().focus()
+            # self.list_stages.first().focus()
+            self.list_stages.first().add_class(self.class_stage_is_visible)
+            # Establece la primer columna como la actual
+            self.current_stage = 0
+            # self.list_stages.first().scroll_visible()
             self.total_stages = len(self.list_stages) - 1
-            self.stages_container = self.query(StagesContainer).first()
+            # self.stages_container = self.query("#stages_container").first()
+            self.scroll_and_focus()
         except:
             pass
 
     async def on_key(self) -> None:
         await self.mount(StagesContainer())
-        self.get_total_stages()
+        # self.get_total_stages()
 
     def set_title(self, title: str, sub_title: str = "") -> None:
         """Change TITLE and SUB_TITLE"""
@@ -79,35 +86,43 @@ class KULTIMATE(App):
     def scroll_and_focus(self) -> None:
         """Move scroll and focus a stage"""
         # DONE: Cambiar el foco al stage seleccionado
-        self.stages_container.scroll_to_widget(self.list_stages[self.actual_stage])
-        self.list_stages[self.actual_stage].focus()
+        self.list_stages[self.current_stage].focus()
+        self.list_stages[self.current_stage].scroll_visible()
+
+    def write_right(self) -> None:
+        with open("/home/felipe/Dropbox/kanban2/right.txt", "a") as ff:
+            ff.write(f"{self.current_stage}\n")
 
     def action_go_to_right(self) -> None:
-        """Go right"""
-        self.list_stages[self.actual_stage].remove_class(self.actual_class)
-        if self.actual_stage < self.total_stages:
-            self.actual_stage += 1
+        """Go right stage"""
+
+        self.list_stages[self.current_stage].remove_class(self.class_stage_is_visible)
+
+        if self.current_stage < self.total_stages:
+            self.current_stage += 1
         else:
-            self.actual_stage = 0
-        self.list_stages[self.actual_stage].add_class(self.actual_class)
+            self.current_stage = 0
+
+        self.list_stages[self.current_stage].add_class(self.class_stage_is_visible)
 
         self.scroll_and_focus()
 
     def action_go_to_left(self) -> None:
-        """Go left"""
-        self.list_stages[self.actual_stage].remove_class(self.actual_class)
-        if self.actual_stage > 0:
-            self.actual_stage -= 1
-        else:
-            self.actual_stage = self.total_stages
+        """Go left stage"""
+        self.list_stages[self.current_stage].remove_class(self.class_stage_is_visible)
 
-        self.list_stages[self.actual_stage].add_class(self.actual_class)
+        if self.current_stage > 0:
+            self.current_stage -= 1
+        else:
+            self.current_stage = self.total_stages
+
+        self.list_stages[self.current_stage].add_class(self.class_stage_is_visible)
 
         self.scroll_and_focus()
 
     def unmount_stages(self) -> None:
         """Desmonta las columnas"""
-        # TODO: Desmontar las columnas actuales - usar remove
+        # DONE: Desmontar las columnas actuales - usar remove
         try:
             stages = self.query(Stage)
             for stage in stages:
@@ -117,15 +132,17 @@ class KULTIMATE(App):
 
     def mount_stages(self) -> None:
         """Monta las columnas"""
-        # TODO: Montar las nuevas columnas usar mount
+        # DONE: Montar las nuevas columnas. Usar mount
         try:
-            stages_container = self.query(StagesContainer)[0]
-            for stage in self.parser_content.get_stages():
+            stages_container = self.query("#stages_container")[0]
+            stages = self.parser_content.get_stages()
+            for stage in stages:
                 new_stage = Stage()
                 new_stage.set_title(stage.text)
                 stages_container.mount(new_stage)
-                new_stage.scroll_visible()
+
             self.get_total_stages()
+
         except:
             with open("/home/felipe/Dropbox/kanban2/nel.txt", "w") as ff:
                 ff.write("nel")
