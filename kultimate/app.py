@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from textual.app import App, ComposeResult
-from textual.reactive import reactive, var
+from textual.reactive import var
 from textual.widgets import Footer, Header
 
 from .utils import ParserMarkdown
@@ -47,8 +47,7 @@ class KULTIMATE(App):
     # observar la variable self.actual_file
     def watch_actual_file(self) -> None:
         """Watch self.actual_file"""
-        self.SUB_TITLE = self.actual_file
-        self.refresh()
+        self.sub_title = self.actual_file
 
     def get_total_stages(self) -> None:
         try:
@@ -95,12 +94,9 @@ class KULTIMATE(App):
         # self.list_stages[self.current_stage].scroll_visible()
 
     def write_right(self) -> None:
-        try:
-            if self.total_containers:
-                with open("/home/felipe/Dropbox/kanban2/stages.txt", "a") as ff:
-                    ff.write(f"{len(self.total_containers)}\n")
-        except:
-            pass
+        """Función auxiliar"""
+        with open("/home/felipe/Dropbox/kanban2/subtitle.txt", "a") as ff:
+            ff.write(f"subtitle modificado {self.SUB_TITLE}\n")
 
     def action_go_to_right(self) -> None:
         """Go right stage"""
@@ -173,6 +169,7 @@ class KULTIMATE(App):
         self.action_select_file()
         self.unmount_stages()
         self.mount_stages()
+        self.refresh()
 
 
 def main(path: str) -> None:
