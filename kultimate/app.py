@@ -96,29 +96,35 @@ class KULTIMATE(App):
     def action_go_to_right(self) -> None:
         """Go right stage"""
 
-        self.list_stages[self.current_stage].remove_class(self.class_stage_is_visible)
+        if len(self.list_stages):
+            self.list_stages[self.current_stage].remove_class(
+                self.class_stage_is_visible
+            )
 
-        if self.current_stage < self.total_stages:
-            self.current_stage += 1
-        else:
-            self.current_stage = 0
+            if self.current_stage < self.total_stages:
+                self.current_stage += 1
+            else:
+                self.current_stage = 0
 
-        self.list_stages[self.current_stage].add_class(self.class_stage_is_visible)
+            self.list_stages[self.current_stage].add_class(self.class_stage_is_visible)
 
-        self.scroll_and_focus()
+            self.scroll_and_focus()
 
     def action_go_to_left(self) -> None:
         """Go left stage"""
-        self.list_stages[self.current_stage].remove_class(self.class_stage_is_visible)
+        if len(self.list_stages):
+            self.list_stages[self.current_stage].remove_class(
+                self.class_stage_is_visible
+            )
 
-        if self.current_stage > 0:
-            self.current_stage -= 1
-        else:
-            self.current_stage = self.total_stages
+            if self.current_stage > 0:
+                self.current_stage -= 1
+            else:
+                self.current_stage = self.total_stages
 
-        self.list_stages[self.current_stage].add_class(self.class_stage_is_visible)
+            self.list_stages[self.current_stage].add_class(self.class_stage_is_visible)
 
-        self.scroll_and_focus()
+            self.scroll_and_focus()
 
     def unmount_stages(self) -> None:
         """Desmonta las columnas"""
