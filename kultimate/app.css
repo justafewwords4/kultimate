@@ -18,6 +18,11 @@ Stage {
   height: 100%;
   border: panel $primary;
   color: $secondary;
+  border-title-align: center;
+
+  border-title-color: black;
+  border-title-background: white;
+  border-title-style: bold;
 }
 
 Stage._actual {

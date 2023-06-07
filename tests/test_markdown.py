@@ -21,3 +21,15 @@ def test_get_description(processMarkdown):
         description
         == "Esta es la primera descripción\n\nEsta es la segunda descripción"
     )
+
+
+def test_get_stages(processMarkdown):
+    """Obtiene las columnas del archivo"""
+    h2s = processMarkdown.get_stages()
+    assert len(h2s) == 5
+
+
+def test_get_stages_names(processMarkdown):
+    """Obtiene las columnas del archivo"""
+    h2s = processMarkdown.get_stages()
+    assert h2s[0].text == "Log" and h2s[1].text == "ToDo"

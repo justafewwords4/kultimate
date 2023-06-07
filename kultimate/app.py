@@ -1,8 +1,10 @@
 from pathlib import Path
 
 from textual.app import App, ComposeResult
+from textual.reactive import reactive, var
 from textual.widgets import Footer, Header
 
+from .utils import ParserMarkdown
 from .widgets import Directory, Stage, StagesContainer
 
 
@@ -26,7 +28,7 @@ class KULTIMATE(App):
     total_stages = 0
     actual_stage = 0
     actual_class = "_actual"
-    actual_file = ""
+    actual_file = var("")
 
     def __init__(self, path: str) -> None:
         """init kultimate"""
@@ -34,32 +36,35 @@ class KULTIMATE(App):
         self.SUB_TITLE = path
         super().__init__()
 
+    def compose(self) -> ComposeResult:
+        yield Header()
+        with StagesContainer():
+            yield Directory(self.home_directory)
+        yield Footer()
+
+    # observar la variable self.actual_file
+    def watch_actual_file(self) -> None:
+        """Watch self.actual_file"""
+        self.SUB_TITLE = self.actual_file
+        self.refresh()
+
+    def get_total_stages(self) -> None:
+        try:
+            self.list_stages = self.query(Stage)
+            self.list_stages.first().focus()
+            self.total_stages = len(self.list_stages) - 1
+            self.stages_container = self.query(StagesContainer).first()
+        except:
+            pass
+
     async def on_key(self) -> None:
         await self.mount(StagesContainer())
-        self.list_stages = self.query(Stage)
-        self.list_stages.first().focus()
-        self.total_stages = len(self.list_stages) - 1
-        self.stages_container = self.query(StagesContainer).first()
+        self.get_total_stages()
 
     def set_title(self, title: str, sub_title: str = "") -> None:
         """Change TITLE and SUB_TITLE"""
         self.TITLE = title
         self.SUB_TITLE = sub_title
-
-    def compose(self) -> ComposeResult:
-        first = Stage(classes=self.actual_class)
-        yield Header()
-        with StagesContainer():
-            yield Directory(self.home_directory)
-            yield first
-            yield Stage()
-            yield Stage()
-            yield Stage()
-            yield Stage()
-            yield Stage()
-            yield Stage()
-            yield Stage()
-        yield Footer()
 
     def action_select_file(self) -> None:
         """Toggle class for Directory"""
@@ -100,10 +105,41 @@ class KULTIMATE(App):
 
         self.scroll_and_focus()
 
+    def unmount_stages(self) -> None:
+        """Desmonta las columnas"""
+        # TODO: Desmontar las columnas actuales - usar remove
+        try:
+            stages = self.query(Stage)
+            for stage in stages:
+                stage.remove()
+        except:
+            pass
+
+    def mount_stages(self) -> None:
+        """Monta las columnas"""
+        # TODO: Montar las nuevas columnas usar mount
+        try:
+            stages_container = self.query(StagesContainer)[0]
+            for stage in self.parser_content.get_stages():
+                new_stage = Stage()
+                new_stage.set_title(stage.text)
+                stages_container.mount(new_stage)
+                new_stage.scroll_visible()
+            self.get_total_stages()
+        except:
+            with open("/home/felipe/Dropbox/kanban2/nel.txt", "w") as ff:
+                ff.write("nel")
+
+    # DONE: Seleccionar un archivo para mostrar.
     #### File selected
     def on_directory_tree_file_selected(self, event: Directory.FileSelected) -> None:
         event.stop()
         self.actual_file = str(event.path)
+        # Ocultar Directory
+        self.parser_content = ParserMarkdown(self.actual_file)
+        self.action_select_file()
+        self.unmount_stages()
+        self.mount_stages()
 
 
 def main(path: str) -> None:

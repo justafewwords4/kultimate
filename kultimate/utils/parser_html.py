@@ -42,7 +42,11 @@ class ParserMarkdown:
 
     def get_stages(self):
         """Obtiene todos los h2 del documento"""
-        pass
+        try:
+            h2s = self.soup.select("h2")
+        except IndexError:
+            h2s = []
+        return h2s
 
     def get_stage_description(self):
         """Obtiene la descripción de cada h2 (stage)"""
