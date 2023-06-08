@@ -38,12 +38,24 @@ StagesContainer {
 Task {
   width: 100%;
   height: auto;
-  border: tall blue;
+  border: tall $success;
   margin: 1;
   padding: 1;
+  color: $background-darken-3; /* ya no mover */
+  background: $success-darken-1;
 }
 
-/* TODO: Cambiar colores de tareas seleccionadas */
+/* DONE: Cambiar colores de tareas seleccionadas */
+/* DONE: Cambiar colores de la tarea que está seleccionada actualmente*/
 ._actual > Task {
-  color: $primary;
+  color: $background-darken-3;
+  border: tall $warning;
+  background:  $warning-lighten-1;
 }
+
+._actual > Task._active {
+  color: $background-darken-3;
+  border: inner $error-lighten-2;
+  background:  $warning-lighten-1;
+}
+

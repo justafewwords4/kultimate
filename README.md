@@ -10,3 +10,4 @@
 - DONE: ¿Por qué se "dispara" el scroll horizontal, si no estoy agregando
   nuevos elementos? R: Cada que se cargaba un nuevo archivo se montaba un
   StageContainer por cada columna
+- DONE: Al cambiar a una columna sin tareas se truena el programa
