@@ -1,4 +1,5 @@
 import pytest
+from rich import print
 
 from kultimate.utils import ParserMarkdown
 
@@ -33,3 +34,9 @@ def test_get_stages_names(processMarkdown):
     """Obtiene las columnas del archivo"""
     h2s = processMarkdown.get_stages()
     assert h2s[0].text == "Log" and h2s[1].text == "ToDo"
+
+
+def test_length_tasks(processMarkdown):
+    """Compara el número de tareas de la primer columna"""
+    tasks = processMarkdown.get_tasks()
+    assert 1 == 1

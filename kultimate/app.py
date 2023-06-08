@@ -38,6 +38,8 @@ class KULTIMATE(App):
         ("q", "quit", "Quit"),
         ("l, right", "go_to_right"),
         ("h, left", "go_to_left"),
+        ("j, down", "go_to_down"),
+        ("k, up", "go_to_up"),
     ]
 
     home_user = Path.home()
@@ -47,6 +49,10 @@ class KULTIMATE(App):
     current_stage = 0
     class_for_selected_stage = "_actual"
     actual_file = var("")
+    # Variables para las tareas
+    # poner a cero cuando se presione l o h
+    current_task = 0
+    total_tasks = 0
 
     def __init__(self, path: str) -> None:
         """init kultimate"""
@@ -117,6 +123,9 @@ class KULTIMATE(App):
     def action_go_to_right(self) -> None:
         """Go right stage"""
 
+        self.current_task = 0
+        self.total_tasks = 0
+
         if len(self.list_stages):
             self.list_stages[self.current_stage].remove_class(
                 self.class_for_selected_stage
@@ -168,15 +177,16 @@ class KULTIMATE(App):
         try:
             stages_container = self.query("#stages_container")[0]
             stages = self.parser_content.get_stages()
+            tasks = self.parser_content.get_tasks()
             # DONE: Montar tareas en las columnas
-            for stage in stages:
+            for index, stage in enumerate(stages):
                 new_stage = Stage()
                 new_stage.set_title(stage.text)
                 # TODO: Que la primer tarea obtenga el foco
                 # TODO: Moverse entre tareas con j y k
                 # TODO: Mover tareas con J, K, H y L
-                for n in range(3):
-                    new_stage.mount(Task(EXAMPLE_MARKDOWN))
+                for task in tasks[index]:
+                    new_stage.mount(Task(task))
                 stages_container.mount(new_stage)
 
             self.get_total_stages()

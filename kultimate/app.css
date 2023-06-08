@@ -12,6 +12,7 @@ Directory._visible {
   display: block;
 }
 
+
 Stage {
   min-width: 30;
   max-width: 40;
@@ -25,6 +26,15 @@ Stage {
   border-title-style: bold;
 }
 
+Stage._actual {
+  border: panel $secondary;
+  color: $primary;
+}
+
+StagesContainer {
+  height: 100%;
+}
+
 Task {
   width: 100%;
   height: auto;
@@ -33,11 +43,7 @@ Task {
   padding: 1;
 }
 
-Stage._actual {
-  border: panel $secondary;
+/* TODO: Cambiar colores de tareas seleccionadas */
+._actual > Task {
   color: $primary;
-}
-
-StagesContainer {
-  height: 100%;
 }

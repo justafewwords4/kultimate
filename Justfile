@@ -14,7 +14,13 @@ yaml:
   poetry run python kultimate/utils/process_yaml.py
 
 run:
-  poetry run python kultimate/app.py
+  kultimate
 
 install:
   poetry install
+
+dev:
+  textual run --dev ./kultimate/app.py
+
+pru:
+  python prueba.py
