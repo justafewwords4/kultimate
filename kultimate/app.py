@@ -5,9 +5,25 @@ from textual.reactive import var
 from textual.widgets import Footer, Header
 
 from .utils import ParserMarkdown
-from .widgets import Directory, Stage, StagesContainer
+from .widgets import Directory, Stage, StagesContainer, Task
 
 # DONE: Hay errores al navegar entre las columnas.
+
+EXAMPLE_MARKDOWN = """\
+# Markdown Document
+
+This is an example of Textual's `Markdown` widget.
+
+## Features
+
+Markdown syntax and extensions are supported.
+
+- Typography *emphasis*, **strong**, `inline code` etc.
+- Headers
+- Lists (bullet and ordered)
+- Syntax highlighted code blocks
+- Tables!
+"""
 
 
 class KULTIMATE(App):
@@ -29,7 +45,7 @@ class KULTIMATE(App):
     is_directory_visible = False
     total_stages = 0
     current_stage = 0
-    class_stage_is_visible = "_actual"
+    class_for_selected_stage = "_actual"
     actual_file = var("")
 
     def __init__(self, path: str) -> None:
@@ -52,11 +68,11 @@ class KULTIMATE(App):
     def get_total_stages(self) -> None:
         try:
             self.list_stages = self.query(Stage)
-            self.list_stages.first().add_class(self.class_stage_is_visible)
+            self.list_stages.first().add_class(self.class_for_selected_stage)
             self.current_stage = 0
             self.total_stages = len(self.list_stages) - 1
             self.scroll_and_focus()
-            ## Borrar después
+            # Borrar después
         except:
             pass
 
@@ -103,7 +119,7 @@ class KULTIMATE(App):
 
         if len(self.list_stages):
             self.list_stages[self.current_stage].remove_class(
-                self.class_stage_is_visible
+                self.class_for_selected_stage
             )
 
             if self.current_stage < self.total_stages:
@@ -111,7 +127,9 @@ class KULTIMATE(App):
             else:
                 self.current_stage = 0
 
-            self.list_stages[self.current_stage].add_class(self.class_stage_is_visible)
+            self.list_stages[self.current_stage].add_class(
+                self.class_for_selected_stage
+            )
 
             self.scroll_and_focus()
 
@@ -120,7 +138,7 @@ class KULTIMATE(App):
 
         if len(self.list_stages):
             self.list_stages[self.current_stage].remove_class(
-                self.class_stage_is_visible
+                self.class_for_selected_stage
             )
 
             if self.current_stage > 0:
@@ -128,7 +146,9 @@ class KULTIMATE(App):
             else:
                 self.current_stage = self.total_stages
 
-            self.list_stages[self.current_stage].add_class(self.class_stage_is_visible)
+            self.list_stages[self.current_stage].add_class(
+                self.class_for_selected_stage
+            )
 
             self.scroll_and_focus()
 
@@ -139,7 +159,7 @@ class KULTIMATE(App):
             stages = self.query(Stage)
             for stage in stages:
                 stage.remove()
-        except:
+        except IndexError:
             pass
 
     def mount_stages(self) -> None:
@@ -148,20 +168,29 @@ class KULTIMATE(App):
         try:
             stages_container = self.query("#stages_container")[0]
             stages = self.parser_content.get_stages()
+            # DONE: Montar tareas en las columnas
             for stage in stages:
                 new_stage = Stage()
                 new_stage.set_title(stage.text)
+                # TODO: Que la primer tarea obtenga el foco
+                # TODO: Moverse entre tareas con j y k
+                # TODO: Mover tareas con J, K, H y L
+                for n in range(3):
+                    new_stage.mount(Task(EXAMPLE_MARKDOWN))
                 stages_container.mount(new_stage)
 
             self.get_total_stages()
 
-        except:
+        except IndexError:
             with open("/home/felipe/Dropbox/kanban2/nel.txt", "w") as ff:
                 ff.write("nel")
 
     # DONE: Seleccionar un archivo para mostrar.
-    #### File selected
-    def on_directory_tree_file_selected(self, event: Directory.FileSelected) -> None:
+    # File selected
+    def on_directory_tree_file_selected(
+        self,
+        event: Directory.FileSelected,
+    ) -> None:
         event.stop()
         self.actual_file = str(event.path)
         # Ocultar Directory

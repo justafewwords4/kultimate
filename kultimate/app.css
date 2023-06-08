@@ -25,6 +25,14 @@ Stage {
   border-title-style: bold;
 }
 
+Task {
+  width: 100%;
+  height: auto;
+  border: tall blue;
+  margin: 1;
+  padding: 1;
+}
+
 Stage._actual {
   border: panel $secondary;
   color: $primary;
