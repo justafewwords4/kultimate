@@ -122,7 +122,8 @@ class KULTIMATE(App):
         """Move scroll and focus a task"""
         # Esta es la función que se llama cuando se cambia de columna
         # DONE: Cambiar el foco al stage seleccionado
-        #  DONE: mostrar la primera tarea cuando se cambia de columna (scroll_visible)
+        #  DONE: mostrar la primera tarea cuando se cambia de columna
+        # (scroll_visible)
         if self.list_tasks:
             self.list_tasks[self.current_task].focus()
             self.list_tasks[self.current_task].scroll_visible()
