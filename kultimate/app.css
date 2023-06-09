@@ -12,7 +12,6 @@ Directory._visible {
   display: block;
 }
 
-
 Stage {
   min-width: 30;
   max-width: 40;
@@ -50,12 +49,11 @@ Task {
 ._actual > Task {
   color: $background-darken-3;
   border: tall $warning;
-  background:  $warning-lighten-1;
+  background: $warning-lighten-1;
 }
 
 ._actual > Task._active {
   color: $background-darken-3;
   border: inner $error-lighten-2;
-  background:  $warning-lighten-1;
+  background: $warning-lighten-1;
 }
-

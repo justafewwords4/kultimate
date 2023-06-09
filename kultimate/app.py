@@ -5,7 +5,7 @@ from textual.css.query import QueryError
 from textual.reactive import var
 from textual.widgets import Footer, Header
 
-from .utils import ParserMarkdown
+from .utils import ParserMarkdown, StagesToMarkdown
 from .widgets import Directory, Stage, StagesContainer, Task
 
 # DONE: Hay errores al navegar entre las columnas.
@@ -20,6 +20,9 @@ class KULTIMATE(App):
 
     BINDINGS = [
         ("s", "select_file", "Select File"),
+        # opción temporal, el archivo se debe guardar
+        # cada que se modifique el contenido
+        ("g", "save_file", "Save File"),
         ("q", "quit", "Quit"),
         ("l, right", "go_to_right"),
         ("h, left", "go_to_left"),
@@ -227,6 +230,20 @@ class KULTIMATE(App):
             )
 
             self.scroll_and_focus_task()
+
+    def action_save_file(self) -> None:
+        """Guardar el archivo. Función temporal,
+        pues no va a ser llamada directamente, sino cada vez
+        que se modifique el contenido"""
+        if self.actual_file:
+            # stages_to_markdown = StagesToMarkdown(self.actual_file)
+            stages_to_markdown = StagesToMarkdown(
+                "/home/felipe/Dropbox/kanban2/new_todo.md"
+            )
+
+            stages_to_markdown.structure_to_markdown(
+                self.list_stages,
+            )
 
     def unmount_stages(self) -> None:
         """Desmonta las columnas"""

@@ -14,7 +14,7 @@ class Directory(DirectoryTree):
     BINDINGS = [
         Binding("j", "cursor_down", "", False),
         Binding("k", "cursor_up", "", False),
-        Binding("enter, l", "select_cursor", "", False),
+        Binding("space, enter, l", "select_cursor", "", False),
     ]
 
     def filter_paths(self, paths: Iterable[Path]) -> Iterable[Path]:
