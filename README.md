@@ -1,5 +1,6 @@
 ## TODO
 
+- TODO: Grabar el archivo a disco
 - DONE: Filtrar los archivos por extensión.
 - DONE: de Markdown a html
 - DONE: del html extraer la info con beautifulsoup
