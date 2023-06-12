@@ -318,7 +318,7 @@ class KULTIMATE(App):
             for index, stage in enumerate(stages):
                 new_stage = Stage()
                 new_stage.set_title(stage.text)
-                # FIXME:Errores al desplegar los movimientos entre J y K
+                # DONE:Errores al desplegar los movimientos entre J y K
                 # TODO: Mover tareas con H y L
                 first_task = True
                 for task in tasks[index]:
