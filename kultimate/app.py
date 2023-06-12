@@ -28,6 +28,8 @@ class KULTIMATE(App):
         ("h, left", "go_to_left"),
         ("j, down", "go_to_down"),
         ("k, up", "go_to_up"),
+        ("J, s+down", "move_down"),
+        ("K, s+up", "move_up"),
     ]
 
     home_user = Path.home()
@@ -231,9 +233,60 @@ class KULTIMATE(App):
 
             self.scroll_and_focus_task()
 
+    def interchange_task(self, index) -> int:
+        """Intercambia las tareas"""
+        if index != self.current_task:
+            try:
+                # quitar la clase a la tarea actual
+                self.list_tasks[self.current_task].render()
+                self.list_tasks[self.current_task].remove_class(
+                    self.class_for_active_task
+                )
+                # hacer el intercambio de contenido
+                aux = self.list_tasks[self.current_task].renderable
+                self.list_tasks[self.current_task].update(
+                    self.list_tasks[index].renderable
+                )
+
+                # render self.current_task
+                self.list_tasks[index].update(aux)
+
+                # establecer la nueva self.current_task
+                self.current_task = index
+                self.list_tasks[self.current_task].add_class(
+                    self.class_for_active_task,
+                )
+                self.scroll_and_focus_task()
+            except IndexError:
+                pass
+
+    def action_move_down(self) -> None:
+        """Mover la tarea hacia abajo. Se presionó la tecla J"""
+        # usar index, la asignación ","
+        # TODO: Obtener el índice del elemento a mover
+        # obtener el lugar de la tarea en la lista
+        index = self.current_task
+        if index < self.total_tasks:
+            index += 1
+        else:
+            index = 0
+
+        self.interchange_task(index)
+
+    def action_move_up(self) -> None:
+        """Mover la tarea hacia abajo. Se presionó la tecla K"""
+        # TODO: Mover el elemento hacia arriba
+        index = self.current_task
+        if index > 0:
+            index -= 1
+        else:
+            index = self.total_tasks
+
+        self.interchange_task(index)
+
     def action_save_file(self) -> None:
         """Guardar el archivo. Función temporal,
-        pues no va a ser llamada directamente, sino cada vez
+        pues no será llamada directamente, sino cada vez
         que se modifique el contenido"""
         if self.actual_file:
             # stages_to_markdown = StagesToMarkdown(self.actual_file)
