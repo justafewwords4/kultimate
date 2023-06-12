@@ -37,7 +37,7 @@ def check_directory(path: str) -> None:
 
 
 @app.command()
-def init(path: str = None):
+def init(path: str = ""):
     """Verifica que exista el archivo de configuración"""
     file_config_exists = exists(path_file_config)
 

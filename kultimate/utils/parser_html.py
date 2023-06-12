@@ -21,7 +21,7 @@ class ParserMarkdown:
         """Toma el título del documento (h1)"""
         try:
             h1 = self.soup.find("h1").text.strip()
-        except:
+        except IndexError:
             h1 = ""
         return h1
 

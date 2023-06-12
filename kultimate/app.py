@@ -233,26 +233,25 @@ class KULTIMATE(App):
 
             self.scroll_and_focus_task()
 
-    def interchange_task(self, index) -> int:
+    def interchange_task(self, index) -> None:
         """Intercambia las tareas"""
         if index != self.current_task:
             try:
                 # quitar la clase a la tarea actual
-                self.list_tasks[self.current_task].render()
                 self.list_tasks[self.current_task].remove_class(
                     self.class_for_active_task
                 )
-                # hacer el intercambio de contenido
-                aux = self.list_tasks[self.current_task].renderable
-                self.list_tasks[self.current_task].update(
-                    self.list_tasks[index].renderable
-                )
 
-                # render self.current_task
-                self.list_tasks[index].update(aux)
+                # hacer el intercambio de contenido
+                actual_text = self.list_tasks[self.current_task].renderable
+                next_text = self.list_tasks[index].renderable
+
+                self.list_tasks[self.current_task].update(next_text)
+                self.list_tasks[index].update(actual_text)
 
                 # establecer la nueva self.current_task
                 self.current_task = index
+                # agregar la clase activa
                 self.list_tasks[self.current_task].add_class(
                     self.class_for_active_task,
                 )
@@ -319,7 +318,8 @@ class KULTIMATE(App):
             for index, stage in enumerate(stages):
                 new_stage = Stage()
                 new_stage.set_title(stage.text)
-                # TODO: Mover tareas con J, K, H y L
+                # FIXME:Errores al desplegar los movimientos entre J y K
+                # TODO: Mover tareas con H y L
                 first_task = True
                 for task in tasks[index]:
                     new_task = Task(task)
