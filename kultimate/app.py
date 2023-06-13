@@ -61,6 +61,63 @@ class KanbanUltimate(App):
             yield Directory(self.home_directory, id="directory")
         yield Footer()
 
+    def __new_active_task(self, old_task) -> None:
+        """Elimina la clase self.class_for_active_task de la
+        old_task y la agrega para current_task.
+        Funciona para la misma columna."""
+        try:
+            self.list_tasks[old_task].remove_class(self.class_for_active_task)
+            self.list_tasks[self.current_task].add_class(
+                self.class_for_active_task,
+            )
+            self.__focus_task()
+        except IndexError:
+            pass
+
+    def __deactivate_task(self) -> None:
+        """Quita la clase self.class_for_active_task de self.current_task"""
+        try:
+            self.list_tasks[self.current_task].remove_class(
+                self.class_for_active_task,
+            )
+        except IndexError:
+            pass
+
+    def __activate_task(self) -> None:
+        """Agrega la clase self.class_for_active_task de self.current_task"""
+        try:
+            self.list_tasks[self.current_task].add_class(
+                self.class_for_active_task,
+            )
+            self.__focus_task()
+        except IndexError:
+            pass
+
+    def __activate_stage(self, old_stage: int) -> None:
+        """Elimina la clase self.class_for_active_stage para la
+        columna old_stage y la agrega para current_stage.
+        Modifica self.current_stage"""
+        try:
+            self.list_stages[old_stage].remove_class(
+                self.class_for_active_stage,
+            )
+            self.list_stages[self.current_stage].add_class(
+                self.class_for_active_stage,
+            )
+            self.list_stages[self.current_stage].scroll_visible()
+            self.current_task = 0
+            if self.list_stages:
+                self.list_tasks = self.list_stages[self.current_stage].query(
+                    Task,
+                )
+                # DONE: Obtener el total de tareas en la columna
+                self.total_tasks = len(self.list_tasks) - 1
+            else:
+                self.total_tasks = 0
+            self.__activate_task()
+        except IndexError:
+            pass
+
     # observar la variable self.actual_file
     def watch_actual_file(self) -> None:
         """Watch self.actual_file"""
@@ -71,10 +128,10 @@ class KanbanUltimate(App):
     def get_total_stages(self) -> None:
         try:
             self.list_stages = self.query(Stage)
-            self.list_stages.first().add_class(self.class_for_active_stage)
             self.current_stage = 0
+            self.__activate_stage(0)
             self.total_stages = len(self.list_stages) - 1
-            self.scroll_and_focus_stage()
+            self.__scroll_and_focus_stage()
             # Borrar después
         except QueryError:
             pass
@@ -84,7 +141,9 @@ class KanbanUltimate(App):
             stages_container = self.query_one(StagesContainer)
             if not stages_container:
                 await self.mount(StagesContainer())
-        except QueryError:
+                actual_stage = self.list_stages[self.current_stage]
+                self.set_focus(actual_stage)
+        except QueryError or IndexError:
             pass
 
     def set_title(self, title: str, sub_title: str = "") -> None:
@@ -97,19 +156,17 @@ class KanbanUltimate(App):
         directory = self.query_one(Directory)
         directory.toggle_class("_visible")
         self.is_directory_visible = not self.is_directory_visible
+
         if self.is_directory_visible:
             self.set_focus(directory)
         else:
-            self.set_focus(None)
+            stages_container = self.query_one(StagesContainer)
+            self.set_focus(stages_container)
 
-    def scroll_and_focus_stage(self) -> None:
+    def __scroll_and_focus_stage(self) -> None:
         """Move scroll and focus a stage"""
         # Esta es la función que se llama cuando se cambia de columna
-        # DONE: Cambiar el foco al stage seleccionado
-        self.list_stages[self.current_stage].add_class(
-            self.class_for_active_stage,
-        )
-        self.list_stages[self.current_stage].scroll_visible()
+        self.__activate_stage(self.current_stage)
         # Hasta aquí las operaciones para la columna
 
         # Ahora las operaciones para las tareas
@@ -123,12 +180,10 @@ class KanbanUltimate(App):
             self.total_tasks = 0
 
         if self.list_tasks:
-            self.list_tasks[self.current_task].add_class(
-                self.class_for_active_task,
-            )
-            self.scroll_and_focus_task()
+            self.__activate_task()
+            self.__focus_task()
 
-    def scroll_and_focus_task(self) -> None:
+    def __focus_task(self) -> None:
         """Move scroll and focus a task"""
         # Esta es la función que se llama cuando se cambia de columna
         # DONE: Cambiar el foco al stage seleccionado
@@ -143,70 +198,37 @@ class KanbanUltimate(App):
         with open("/home/felipe/Dropbox/kanban2/subtitle.txt", "a") as ff:
             ff.write(f"subtitle modificado {self.SUB_TITLE}\n")
 
-    def eliminate_active_class_for_task(self):
-        """Quitar la clase de tarea activa para la columna actual"""
-        try:
-            # Si existe una lista de tareas eliminar la clase de tarea activa
-            self.list_tasks[self.current_task].remove_class(
-                self.class_for_active_task,
-            )
-        except IndexError:
-            pass
-
-    def add_active_class_for_task(self):
-        """Quitar la clase de tarea activa para la columna actual"""
-        try:
-            # Si existe una lista de tareas eliminar la clase de tarea activa
-            self.list_tasks[self.current_task].add_class(
-                self.class_for_active_task,
-            )
-        except IndexError:
-            pass
-
     def action_go_to_right(self) -> None:
         """Go right stage"""
 
-        self.eliminate_active_class_for_task()
+        self.__deactivate_task()
 
         self.current_task = 0
         self.total_tasks = 0
 
+        old_stage = self.current_stage
         if len(self.list_stages):
-            self.list_stages[self.current_stage].remove_class(
-                self.class_for_active_stage
-            )
-
             if self.current_stage < self.total_stages:
                 self.current_stage += 1
             else:
                 self.current_stage = 0
 
-            self.list_stages[self.current_stage].add_class(
-                self.class_for_active_stage,
-            )
-
-            self.scroll_and_focus_stage()
+        self.__activate_stage(old_stage)
 
     def action_go_to_left(self) -> None:
         """Go left stage"""
 
-        self.eliminate_active_class_for_task()
+        self.__deactivate_task()
 
         if len(self.list_stages):
-            self.list_stages[self.current_stage].remove_class(
-                self.class_for_active_stage
-            )
+            old_stage = self.current_stage
 
             if self.current_stage > 0:
                 self.current_stage -= 1
             else:
                 self.current_stage = self.total_stages
 
-            self.list_stages[self.current_stage].add_class(
-                self.class_for_active_stage,
-            )
-
-            self.scroll_and_focus_stage()
+            self.__activate_stage(old_stage)
 
     # DONE: Moverse entre tareas con j y k
     def action_go_to_down(self) -> None:
@@ -215,47 +237,33 @@ class KanbanUltimate(App):
         # obtener la tarea activa: self.current_task es la tarea actual
         # quitar la clase de tarea activa
         if self.list_tasks:
-            self.list_tasks[self.current_task].remove_class(
-                self.class_for_active_task,
-            )
+            old_task = self.current_task
             # ir abajo
             if self.current_task < self.total_tasks:
                 self.current_task += 1
             else:
                 self.current_task = 0
             # poner clase de tarea activa
-            self.list_tasks[self.current_task].add_class(
-                self.class_for_active_task,
-            )
-
-            self.scroll_and_focus_task()
+            self.__new_active_task(old_task)
 
     def action_go_to_up(self) -> None:
         """Ir a la tarea de arriba"""
         if self.list_tasks:
-            self.list_tasks[self.current_task].remove_class(
-                self.class_for_active_task,
-            )
+            old_task = self.current_task
             # ir arriba
             if self.current_task > 0:
                 self.current_task -= 1
             else:
                 self.current_task = self.total_tasks
             # poner clase de tarea activa
-            self.list_tasks[self.current_task].add_class(
-                self.class_for_active_task,
-            )
-
-            self.scroll_and_focus_task()
+            self.__new_active_task(old_task)
 
     def interchange_task(self, index) -> None:
         """Intercambia las tareas"""
         if index != self.current_task:
             try:
                 # quitar la clase a la tarea actual
-                self.list_tasks[self.current_task].remove_class(
-                    self.class_for_active_task
-                )
+                self.__deactivate_task()
 
                 # hacer el intercambio de contenido
                 actual_text = self.list_tasks[self.current_task].renderable
@@ -267,10 +275,7 @@ class KanbanUltimate(App):
                 # establecer la nueva self.current_task
                 self.current_task = index
                 # agregar la clase activa
-                self.list_tasks[self.current_task].add_class(
-                    self.class_for_active_task,
-                )
-                self.scroll_and_focus_task()
+                self.__activate_task()
             except IndexError:
                 pass
 
@@ -305,30 +310,29 @@ class KanbanUltimate(App):
                 # DONE: mover tareas
                 # DOING:
                 # Eliminar la tarea de la columna actual
-                # FIXME: No funciona al presionar la primera H,
-                # hasta la segunda. En realidad no funciona la primera tecla
                 text_to_move = self.list_tasks[self.current_task].renderable
                 self.list_tasks[self.current_task].remove()
-                self.list_stages[self.current_stage].remove_class(
-                    self.class_for_active_stage,
-                )
+                old_stage = self.current_stage
                 # Actualizar a la nueva columna
                 self.current_stage = new_stage
                 moved_task = Task(text_to_move)
                 self.list_stages[self.current_stage].mount(moved_task)
 
                 try:
-                    self.list_tasks = self.list_stages[self.current_stage].query(Task)
+                    # uso esta variable para acortar la línea siguiente
+                    current_stage = self.current_stage
+                    self.list_tasks = self.list_stages[current_stage].query(
+                        Task,
+                    )
                     # DONE: Obtener el total de tareas en la columna
                     self.total_tasks = len(self.list_tasks) - 1
                 except QueryError:
                     pass
+                self.__activate_stage(old_stage)
+                self.__deactivate_task()
                 self.current_task = self.total_tasks
-                self.list_stages[self.current_stage].add_class(
-                    self.class_for_active_stage,
-                )
-                self.add_active_class_for_task()
-                self.scroll_and_focus_task()
+                self.__activate_task()
+                # self.scroll_and_focus_task()
         except IndexError:
             pass
 
@@ -374,11 +378,11 @@ class KanbanUltimate(App):
         except IndexError:
             pass
 
-    def mount_stages(self) -> None:
+    async def mount_stages(self) -> None:
         """Monta las columnas"""
         # DONE: Montar las nuevas columnas. Usar mount
         try:
-            stages_container = self.query("#stages_container")[0]
+            stages_container = self.query_one("#stages_container")
             stages = self.parser_content.get_stages()
             tasks = self.parser_content.get_tasks()
             # DONE: Montar tareas en las columnas
@@ -390,20 +394,20 @@ class KanbanUltimate(App):
                 first_task = True
                 for task in tasks[index]:
                     new_task = Task(task)
-                    new_stage.mount(new_task)
+                    await new_stage.mount(new_task)
                     # DONE: Que la primer tarea obtenga el foco
                     if index == 0 and first_task:
                         new_task.focus()
                         first_task = False
                         new_task.add_class(self.class_for_active_task)
 
-                stages_container.mount(new_stage)
+                await stages_container.mount(new_stage)
 
             self.get_total_stages()
 
-            self.scroll_and_focus_stage()
-            self.current_task = self.total_tasks
-            self.scroll_and_focus_task()
+            self.__scroll_and_focus_stage()
+            # self.current_task = self.total_tasks
+            self.__focus_task()
 
         except IndexError:
             with open("/home/felipe/Dropbox/kanban2/nel.txt", "w") as ff:
@@ -411,7 +415,7 @@ class KanbanUltimate(App):
 
     # DONE: Seleccionar un archivo para mostrar.
     # File selected
-    def on_directory_tree_file_selected(
+    async def on_directory_tree_file_selected(
         self,
         event: Directory.FileSelected,
     ) -> None:
@@ -421,7 +425,7 @@ class KanbanUltimate(App):
         self.parser_content = ParserMarkdown(self.actual_file)
         self.action_select_file()
         self.unmount_stages()
-        self.mount_stages()
+        await self.mount_stages()
         self.refresh()
 
 
