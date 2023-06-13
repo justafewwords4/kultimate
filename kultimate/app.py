@@ -74,7 +74,7 @@ class KanbanUltimate(App):
         except IndexError:
             pass
 
-    def __deactivate_task(self) -> None:
+    def __unselect_task(self) -> None:
         """Quita la clase self.class_for_active_task de self.current_task"""
         try:
             self.list_tasks[self.current_task].remove_class(
@@ -83,7 +83,7 @@ class KanbanUltimate(App):
         except IndexError:
             pass
 
-    def __activate_task(self) -> None:
+    def __select_task(self) -> None:
         """Agrega la clase self.class_for_active_task de self.current_task"""
         try:
             self.list_tasks[self.current_task].add_class(
@@ -93,7 +93,11 @@ class KanbanUltimate(App):
         except IndexError:
             pass
 
-    def __activate_stage(self, old_stage: int) -> None:
+    def __activate_stage(
+        self,
+        old_stage: int,
+        scroll_to_task: bool = True,
+    ) -> None:
         """Elimina la clase self.class_for_active_stage para la
         columna old_stage y la agrega para current_stage.
         Modifica self.current_stage"""
@@ -114,7 +118,9 @@ class KanbanUltimate(App):
                 self.total_tasks = len(self.list_tasks) - 1
             else:
                 self.total_tasks = 0
-            self.__activate_task()
+
+            if scroll_to_task:
+                self.__select_task()
         except IndexError:
             pass
 
@@ -180,17 +186,14 @@ class KanbanUltimate(App):
             self.total_tasks = 0
 
         if self.list_tasks:
-            self.__activate_task()
+            self.__select_task()
             self.__focus_task()
 
     def __focus_task(self) -> None:
         """Move scroll and focus a task"""
-        # Esta es la función que se llama cuando se cambia de columna
-        # DONE: Cambiar el foco al stage seleccionado
-        #  DONE: mostrar la primera tarea cuando se cambia de columna
-        # (scroll_visible)
+
         if self.list_tasks:
-            self.list_tasks[self.current_task].focus()
+            self.list_tasks[self.current_task].focus(True)
             self.list_tasks[self.current_task].scroll_visible()
 
     def write_right(self) -> None:
@@ -201,7 +204,7 @@ class KanbanUltimate(App):
     def action_go_to_right(self) -> None:
         """Go right stage"""
 
-        self.__deactivate_task()
+        self.__unselect_task()
 
         self.current_task = 0
         self.total_tasks = 0
@@ -218,7 +221,7 @@ class KanbanUltimate(App):
     def action_go_to_left(self) -> None:
         """Go left stage"""
 
-        self.__deactivate_task()
+        self.__unselect_task()
 
         if len(self.list_stages):
             old_stage = self.current_stage
@@ -263,7 +266,7 @@ class KanbanUltimate(App):
         if index != self.current_task:
             try:
                 # quitar la clase a la tarea actual
-                self.__deactivate_task()
+                self.__unselect_task()
 
                 # hacer el intercambio de contenido
                 actual_text = self.list_tasks[self.current_task].renderable
@@ -275,7 +278,7 @@ class KanbanUltimate(App):
                 # establecer la nueva self.current_task
                 self.current_task = index
                 # agregar la clase activa
-                self.__activate_task()
+                self.__select_task()
             except IndexError:
                 pass
 
@@ -303,40 +306,26 @@ class KanbanUltimate(App):
 
         self.interchange_task(index)
 
-    def move_task(self, new_stage) -> None:
+    async def move_task(self, new_stage) -> None:
         """mover tarea entre columnas"""
-        try:
-            if new_stage != self.current_stage:
-                # DONE: mover tareas
-                # DOING:
-                # Eliminar la tarea de la columna actual
-                text_to_move = self.list_tasks[self.current_task].renderable
-                self.list_tasks[self.current_task].remove()
-                old_stage = self.current_stage
-                # Actualizar a la nueva columna
-                self.current_stage = new_stage
-                moved_task = Task(text_to_move)
-                self.list_stages[self.current_stage].mount(moved_task)
+        if new_stage != self.current_stage:
+            # copiar texto de la tarea
+            text_to_move = self.list_tasks[self.current_task].renderable
+            # eliminar tarea de la columna actual
+            self.list_tasks[self.current_task].remove()
+            # agregar tarea a la nueva columna
+            task_to_move = Task(text_to_move)
+            old_stage = self.current_stage
+            self.current_stage = new_stage
+            await self.list_stages[self.current_stage].mount(task_to_move)
+            self.__activate_stage(old_stage, False)
+            # deseleccionar la tarea 0
+            # self.__unselect_task()
+            # resaltar la nueva tarea
+            self.current_task = self.total_tasks
+            self.__select_task()
 
-                try:
-                    # uso esta variable para acortar la línea siguiente
-                    current_stage = self.current_stage
-                    self.list_tasks = self.list_stages[current_stage].query(
-                        Task,
-                    )
-                    # DONE: Obtener el total de tareas en la columna
-                    self.total_tasks = len(self.list_tasks) - 1
-                except QueryError:
-                    pass
-                self.__activate_stage(old_stage)
-                self.__deactivate_task()
-                self.current_task = self.total_tasks
-                self.__activate_task()
-                # self.scroll_and_focus_task()
-        except IndexError:
-            pass
-
-    def action_move_left(self) -> None:
+    async def action_move_left(self) -> None:
         """Mover la tarea a la columna de la izquierda. Se presionó H"""
         new_stage = self.current_stage
         if new_stage > 0:
@@ -344,9 +333,9 @@ class KanbanUltimate(App):
         else:
             new_stage = self.total_stages
 
-        self.move_task(new_stage)
+        await self.move_task(new_stage)
 
-    def action_move_right(self) -> None:
+    async def action_move_right(self) -> None:
         """Mover la tarea a la columna de la derecha. Se presionó L"""
         new_stage = self.current_stage
         if new_stage < self.total_stages:
@@ -354,7 +343,7 @@ class KanbanUltimate(App):
         else:
             new_stage = 0
 
-        self.move_task(new_stage)
+        await self.move_task(new_stage)
 
     def action_save_file(self) -> None:
         """Guardar el archivo. Función temporal,
