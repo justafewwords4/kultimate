@@ -60,4 +60,4 @@ class StagesToMarkdown:
 
         print(self.markdown_text)
         # TODO: Cuando acabe la función, descomentar la última línea
-        self.write()
+        # self.write()

@@ -11,7 +11,7 @@ from .widgets import Directory, Stage, StagesContainer, Task
 # DONE: Hay errores al navegar entre las columnas.
 
 
-class KULTIMATE(App):
+class KanbanUltimate(App):
     """The main app class"""
 
     TITLE = "KUltimate"
@@ -30,6 +30,8 @@ class KULTIMATE(App):
         ("k, up", "go_to_up"),
         ("J, s+down", "move_down"),
         ("K, s+up", "move_up"),
+        ("H, s+left", "move_left"),
+        ("L, s+right", "move_right"),
     ]
 
     home_user = Path.home()
@@ -38,7 +40,7 @@ class KULTIMATE(App):
     total_stages = 0
     current_stage = 0
     # Classes para la columna y la tarea activa
-    class_for_selected_stage = "_actual"
+    class_for_active_stage = "_actual"
     class_for_active_task = "_active"
     # Archivo md en el que se está trabajando
     actual_file = var("")
@@ -69,7 +71,7 @@ class KULTIMATE(App):
     def get_total_stages(self) -> None:
         try:
             self.list_stages = self.query(Stage)
-            self.list_stages.first().add_class(self.class_for_selected_stage)
+            self.list_stages.first().add_class(self.class_for_active_stage)
             self.current_stage = 0
             self.total_stages = len(self.list_stages) - 1
             self.scroll_and_focus_stage()
@@ -104,7 +106,9 @@ class KULTIMATE(App):
         """Move scroll and focus a stage"""
         # Esta es la función que se llama cuando se cambia de columna
         # DONE: Cambiar el foco al stage seleccionado
-        # self.list_stages[self.current_stage].focus()
+        self.list_stages[self.current_stage].add_class(
+            self.class_for_active_stage,
+        )
         self.list_stages[self.current_stage].scroll_visible()
         # Hasta aquí las operaciones para la columna
 
@@ -117,6 +121,7 @@ class KULTIMATE(App):
             self.total_tasks = len(self.list_tasks) - 1
         except IndexError:
             self.total_tasks = 0
+
         if self.list_tasks:
             self.list_tasks[self.current_task].add_class(
                 self.class_for_active_task,
@@ -148,6 +153,16 @@ class KULTIMATE(App):
         except IndexError:
             pass
 
+    def add_active_class_for_task(self):
+        """Quitar la clase de tarea activa para la columna actual"""
+        try:
+            # Si existe una lista de tareas eliminar la clase de tarea activa
+            self.list_tasks[self.current_task].add_class(
+                self.class_for_active_task,
+            )
+        except IndexError:
+            pass
+
     def action_go_to_right(self) -> None:
         """Go right stage"""
 
@@ -158,7 +173,7 @@ class KULTIMATE(App):
 
         if len(self.list_stages):
             self.list_stages[self.current_stage].remove_class(
-                self.class_for_selected_stage
+                self.class_for_active_stage
             )
 
             if self.current_stage < self.total_stages:
@@ -167,7 +182,7 @@ class KULTIMATE(App):
                 self.current_stage = 0
 
             self.list_stages[self.current_stage].add_class(
-                self.class_for_selected_stage
+                self.class_for_active_stage,
             )
 
             self.scroll_and_focus_stage()
@@ -179,7 +194,7 @@ class KULTIMATE(App):
 
         if len(self.list_stages):
             self.list_stages[self.current_stage].remove_class(
-                self.class_for_selected_stage
+                self.class_for_active_stage
             )
 
             if self.current_stage > 0:
@@ -188,7 +203,7 @@ class KULTIMATE(App):
                 self.current_stage = self.total_stages
 
             self.list_stages[self.current_stage].add_class(
-                self.class_for_selected_stage
+                self.class_for_active_stage,
             )
 
             self.scroll_and_focus_stage()
@@ -262,7 +277,7 @@ class KULTIMATE(App):
     def action_move_down(self) -> None:
         """Mover la tarea hacia abajo. Se presionó la tecla J"""
         # usar index, la asignación ","
-        # TODO: Obtener el índice del elemento a mover
+        # DONE: Obtener el índice del elemento a mover
         # obtener el lugar de la tarea en la lista
         index = self.current_task
         if index < self.total_tasks:
@@ -274,7 +289,7 @@ class KULTIMATE(App):
 
     def action_move_up(self) -> None:
         """Mover la tarea hacia abajo. Se presionó la tecla K"""
-        # TODO: Mover el elemento hacia arriba
+        # DONE: Mover el elemento hacia arriba
         index = self.current_task
         if index > 0:
             index -= 1
@@ -282,6 +297,60 @@ class KULTIMATE(App):
             index = self.total_tasks
 
         self.interchange_task(index)
+
+    def move_task(self, new_stage) -> None:
+        """mover tarea entre columnas"""
+        try:
+            if new_stage != self.current_stage:
+                # DONE: mover tareas
+                # DOING:
+                # Eliminar la tarea de la columna actual
+                # FIXME: No funciona al presionar la primera H,
+                # hasta la segunda. En realidad no funciona la primera tecla
+                text_to_move = self.list_tasks[self.current_task].renderable
+                self.list_tasks[self.current_task].remove()
+                self.list_stages[self.current_stage].remove_class(
+                    self.class_for_active_stage,
+                )
+                # Actualizar a la nueva columna
+                self.current_stage = new_stage
+                moved_task = Task(text_to_move)
+                self.list_stages[self.current_stage].mount(moved_task)
+
+                try:
+                    self.list_tasks = self.list_stages[self.current_stage].query(Task)
+                    # DONE: Obtener el total de tareas en la columna
+                    self.total_tasks = len(self.list_tasks) - 1
+                except QueryError:
+                    pass
+                self.current_task = self.total_tasks
+                self.list_stages[self.current_stage].add_class(
+                    self.class_for_active_stage,
+                )
+                self.add_active_class_for_task()
+                self.scroll_and_focus_task()
+        except IndexError:
+            pass
+
+    def action_move_left(self) -> None:
+        """Mover la tarea a la columna de la izquierda. Se presionó H"""
+        new_stage = self.current_stage
+        if new_stage > 0:
+            new_stage -= 1
+        else:
+            new_stage = self.total_stages
+
+        self.move_task(new_stage)
+
+    def action_move_right(self) -> None:
+        """Mover la tarea a la columna de la derecha. Se presionó L"""
+        new_stage = self.current_stage
+        if new_stage < self.total_stages:
+            new_stage += 1
+        else:
+            new_stage = 0
+
+        self.move_task(new_stage)
 
     def action_save_file(self) -> None:
         """Guardar el archivo. Función temporal,
@@ -293,9 +362,7 @@ class KULTIMATE(App):
                 "/home/felipe/Dropbox/kanban2/new_todo.md"
             )
 
-            stages_to_markdown.structure_to_markdown(
-                self.list_stages,
-            )
+            stages_to_markdown.structure_to_markdown(self.list_stages)
 
     def unmount_stages(self) -> None:
         """Desmonta las columnas"""
@@ -319,7 +386,7 @@ class KULTIMATE(App):
                 new_stage = Stage()
                 new_stage.set_title(stage.text)
                 # DONE:Errores al desplegar los movimientos entre J y K
-                # TODO: Mover tareas con H y L
+                # DONE: Mover tareas con H y L
                 first_task = True
                 for task in tasks[index]:
                     new_task = Task(task)
@@ -333,6 +400,10 @@ class KULTIMATE(App):
                 stages_container.mount(new_stage)
 
             self.get_total_stages()
+
+            self.scroll_and_focus_stage()
+            self.current_task = self.total_tasks
+            self.scroll_and_focus_task()
 
         except IndexError:
             with open("/home/felipe/Dropbox/kanban2/nel.txt", "w") as ff:
@@ -355,4 +426,4 @@ class KULTIMATE(App):
 
 
 def main(path: str) -> None:
-    KULTIMATE(path).run()
+    KanbanUltimate(path).run()
