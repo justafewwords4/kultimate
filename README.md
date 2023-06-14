@@ -12,7 +12,7 @@ pip install kultimate
 ## ToDo
 
 - TODO: Crear archivo
-- TODO: Si no existe directorio pedir
+- TODO: Si no existe directorio pedirlo
 - TODO: Agregar columnas
 - TODO: Mover columnas
 - DONE: Grabar a disco
