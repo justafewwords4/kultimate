@@ -23,7 +23,9 @@ class KanbanUltimate(App):
         # opción temporal, el archivo se debe guardar
         # cada que se modifique el contenido
         ("g", "save_file", "Save File"),
+        ("ctrl+d", "mark_as_done", "Mark as Done"),
         ("q", "quit", "Quit"),
+        # inician las teclas sin leyendas
         ("l, right", "go_to_right"),
         ("h, left", "go_to_left"),
         ("j, down", "go_to_down"),
@@ -156,6 +158,38 @@ class KanbanUltimate(App):
         """Change TITLE and SUB_TITLE"""
         self.TITLE = title
         self.SUB_TITLE = sub_title
+
+    def __actualize_total_tasks(self) -> None:
+        """Actualiza el total de las tareas"""
+        try:
+            current_stage = self.current_stage
+            self.list_tasks = self.list_stages[current_stage].query(Task)
+            self.total_tasks = len(self.list_tasks) - 1
+        except IndexError:
+            pass
+
+    def action_mark_as_done(self) -> None:
+        """Send task to last stage"""
+        if self.current_stage != self.total_stages:
+            if self.total_tasks == 0:
+                return
+
+            # copiar el texto de la tarea
+            text_task_done = self.list_tasks[self.current_task].renderable
+            # eliminar la tarea de la columna actual
+            self.list_tasks[self.current_task].remove()
+            # actualizar self.total_tasks y self.current_task
+
+            self.__actualize_total_tasks()
+            if self.current_task == self.total_tasks + 1:
+                self.current_task = self.total_tasks
+
+            # resaltar la nueva tarea y hacer scroll
+            self.__select_task()
+            # crear una nueva tarea
+            task_done = Task(text_task_done)
+            # agregar a la última columna
+            self.list_stages[self.total_stages].mount(task_done)
 
     def action_select_file(self) -> None:
         """Toggle class for Directory"""

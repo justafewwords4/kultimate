@@ -7,8 +7,9 @@
   - TODO: Agregar tareas
     - TODO: Agregar sub tareas
   - TODO: Borrar tareas
-  - TODO: Marcar tareas como hechas
+  - DONE: Enviar tareas a la última columna
   - TODO: Duplicar tareas
+  - TODO: Crear un color nuevo para la última columna
 - Quizás
   - DONE: Cambiar Task al widget Input
 - DONE: Filtrar los archivos por extensión.
@@ -27,6 +28,6 @@
   un archivo
 - DONE: al presionar primero la tecla k (go_to_up) no se mueve correctamente a
   la última tarea
-- FIXME: al mover una tarea hacia la primer columna, si se tiene que hacer
+- DONE: al mover una tarea hacia la primer columna, si se tiene que hacer
   scroll, una vez se hace correctamente, y otra no
 - TODO: Seleccionar tareas con click del ratón
