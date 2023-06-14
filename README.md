@@ -1,6 +1,6 @@
 # Kultimate
 
-[kultimate](render1686782901985.gif)
+![kultimate](render1686782901985.gif)
 
 Aplicación CLI Python para manejar archivos markdown como tableros Kanban.
 Programado con [textual](https://textual.textualize.io/).
