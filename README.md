@@ -1,6 +1,18 @@
+# Kultimate
+
+Aplicación CLI Python para manejar archivos markdown como tableros Kanban.
+Programado con [textual](https://textual.textualize.io/).
+
+# Instalación
+
+```sh
+pip install kultimate
+```
+
 ## ToDo
 
-- TODO: Grabar a disco
+- TODO: Crear archivo
+- DONE: Grabar a disco
 - DONE: Agregar tareas
 - DONE: preguntar antes de borrar la tarea
 - DONE: Borrar tareas

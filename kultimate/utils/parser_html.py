@@ -4,7 +4,7 @@ from rich import print
 
 
 class ParserMarkdown:
-    """Parsear el html generado a partir de markdown"""
+    """Procesar el html generado a partir de markdown"""
 
     def __init__(self, file_path):
         """Obtiene el contenido del archivo"""

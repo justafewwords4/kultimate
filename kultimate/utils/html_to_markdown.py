@@ -16,7 +16,7 @@ class StagesToMarkdown:
     # Me pregunto si necesito convertir de html a markdown,
     # es probable que solo necesite recorrer la lista y escribir el archivo.
 
-    def __init__(self, name_file: str) -> None:
+    def set_file(self, name_file: str) -> None:
         """init name_file"""
         self.name_file = name_file
 
@@ -32,7 +32,7 @@ class StagesToMarkdown:
         self.html_text = markdown.markdown(text_markdown)
         print(self.html_text)
 
-    def write(self) -> None:
+    def write_to_file(self) -> None:
         """Escribir markdown en el archivo dado"""
         # DONE: Grabar el archivo a disco
         with open(self.name_file, "w") as ff:
@@ -59,5 +59,5 @@ class StagesToMarkdown:
             self.markdown_text += "\n"
 
         print(self.markdown_text)
-        # TODO: Cuando acabe la función, descomentar la última línea
-        # self.write()
+        # DONE: Cuando acabe la función, descomentar la última línea
+        self.write_to_file()

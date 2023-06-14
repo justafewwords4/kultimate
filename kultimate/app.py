@@ -24,20 +24,19 @@ class KanbanUltimate(App):
         ("s", "select_file", "Select File"),
         # opción temporal, el archivo se debe guardar
         # cada que se modifique el contenido
-        ("g", "save_file", "Save File"),
-        ("o", "add_task", "Add Task"),
-        ("ctrl+l", "mark_as_done", "Mark as Done"),
-        ("ctrl+d", "delete_task", "Delete Task"),
+        ("o", "add_task", "Add Task"),  # DONE: Guardar archivo
+        ("ctrl+l", "mark_as_done", "Mark as Done"),  # DONE: Guardar archivo
+        ("ctrl+d", "delete_task", "Delete Task"),  # DONE: Guardar archivo
         ("q", "quit", "Quit"),
         # inician las teclas sin leyendas
         ("l, right", "go_to_right"),
         ("h, left", "go_to_left"),
         ("j, down", "go_to_down"),
         ("k, up", "go_to_up"),
-        ("J, s+down", "move_down"),
-        ("K, s+up", "move_up"),
-        ("H, s+left", "move_left"),
-        ("L, s+right", "move_right"),
+        ("J, s+down", "move_down"),  # DONE: Guardar archivo
+        ("K, s+up", "move_up"),  # DONE: Guardar archivo
+        ("H, s+left", "move_left"),  # DONE: Guardar archivo
+        ("L, s+right", "move_right"),  # DONE: Guardar archivo
     ]
 
     home_user = Path.home()
@@ -54,6 +53,8 @@ class KanbanUltimate(App):
     # poner a cero cuando se presione l o h
     current_task = 0
     total_tasks = 0
+    # variable para guardar los archivos
+    stages_to_markdown = StagesToMarkdown()
 
     def __init__(self, path: str) -> None:
         """init kultimate"""
@@ -136,6 +137,7 @@ class KanbanUltimate(App):
         # por alguna razón hay que poner sub_title en minúsculas, no en
         # mayúsculas, o no funciona
         self.sub_title = self.actual_file
+        self.stages_to_markdown.set_file(self.actual_file)
 
     def get_total_stages(self) -> None:
         try:
@@ -190,6 +192,9 @@ class KanbanUltimate(App):
                 self.current_task = self.total_tasks
                 self.__new_active_task(old_task)
 
+                # guardar al archivo
+                self.__save_to_file()
+
         self.push_screen("add_task", get_value_from_input)
 
     def action_delete_task(self) -> None:
@@ -208,6 +213,9 @@ class KanbanUltimate(App):
 
                     # resaltar la nueva tarea y hacer scroll
                     self.__select_task()
+
+                    # guardar al archivo
+                    self.__save_to_file()
 
         self.push_screen("delete_task", check_delete_task)
 
@@ -234,6 +242,9 @@ class KanbanUltimate(App):
             task_done = Task(text_task_done)
             # agregar a la última columna
             self.list_stages[self.total_stages].mount(task_done)
+
+            # guardar al archivo
+            self.__save_to_file()
 
     def action_select_file(self) -> None:
         """Toggle class for Directory"""
@@ -373,6 +384,9 @@ class KanbanUltimate(App):
 
         self.interchange_task(index)
 
+        # guardar al archivo
+        self.__save_to_file()
+
     def action_move_up(self) -> None:
         """Mover la tarea hacia abajo. Se presionó la tecla K"""
         # DONE: Mover el elemento hacia arriba
@@ -383,6 +397,9 @@ class KanbanUltimate(App):
             index = self.total_tasks
 
         self.interchange_task(index)
+
+        # guardar al archivo
+        self.__save_to_file()
 
     async def move_task(self, new_stage) -> None:
         """mover tarea entre columnas"""
@@ -413,6 +430,9 @@ class KanbanUltimate(App):
 
         await self.move_task(new_stage)
 
+        # guardar al archivo
+        self.__save_to_file()
+
     async def action_move_right(self) -> None:
         """Mover la tarea a la columna de la derecha. Se presionó L"""
         new_stage = self.current_stage
@@ -423,17 +443,16 @@ class KanbanUltimate(App):
 
         await self.move_task(new_stage)
 
-    def action_save_file(self) -> None:
+        # guardar al archivo
+        self.__save_to_file()
+
+    def __save_to_file(self) -> None:
         """Guardar el archivo. Función temporal,
         pues no será llamada directamente, sino cada vez
         que se modifique el contenido"""
         if self.actual_file:
             # stages_to_markdown = StagesToMarkdown(self.actual_file)
-            stages_to_markdown = StagesToMarkdown(
-                "/home/felipe/Dropbox/kanban2/new_todo.md"
-            )
-
-            stages_to_markdown.structure_to_markdown(self.list_stages)
+            self.stages_to_markdown.structure_to_markdown(self.list_stages)
 
     def unmount_stages(self) -> None:
         """Desmonta las columnas"""
