@@ -3,3 +3,4 @@ __pycache__
 dist/
 .trunk/
 .pytest_cache/
+demo.yml
