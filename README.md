@@ -1,8 +1,7 @@
 ## ToDo
 
-- TODO: preguntar antes de borrar la tarea
 - TODO: Agregar tareas
-- TODO: Duplicar tareas
+- DONE: preguntar antes de borrar la tarea
 - DONE: Borrar tareas
 - DONE: Enviar tareas a la última columna
 - Operaciones en archivo
@@ -12,6 +11,7 @@
 
 ## Quizás
 
+- TODO: Duplicar tareas
 - TODO: Agregar sub tareas
 - TODO: Crear un color nuevo para la última columna
 - TODO: Seleccionar tareas con click del ratón
