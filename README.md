@@ -12,6 +12,9 @@ pip install kultimate
 ## ToDo
 
 - TODO: Crear archivo
+- TODO: Si no existe directorio pedir
+- TODO: Agregar columnas
+- TODO: Mover columnas
 - DONE: Grabar a disco
 - DONE: Agregar tareas
 - DONE: preguntar antes de borrar la tarea
