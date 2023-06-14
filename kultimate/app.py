@@ -5,6 +5,7 @@ from textual.css.query import QueryError
 from textual.reactive import var
 from textual.widgets import Footer, Header
 
+from .screens import DeleteTask
 from .utils import ParserMarkdown, StagesToMarkdown
 from .widgets import Directory, Stage, StagesContainer, Task
 
@@ -17,13 +18,15 @@ class KanbanUltimate(App):
     TITLE = "KUltimate"
     SUB_TITLE = "Using Kanban with Markdown"
     CSS_PATH = "app.css"
+    SCREENS = {"delete_task": DeleteTask}
 
     BINDINGS = [
         ("s", "select_file", "Select File"),
         # opción temporal, el archivo se debe guardar
         # cada que se modifique el contenido
         ("g", "save_file", "Save File"),
-        ("ctrl+d", "mark_as_done", "Mark as Done"),
+        ("ctrl+l", "mark_as_done", "Mark as Done"),
+        ("ctrl+d", "delete_task", "Delete Task"),
         ("q", "quit", "Quit"),
         # inician las teclas sin leyendas
         ("l, right", "go_to_right"),
@@ -162,11 +165,31 @@ class KanbanUltimate(App):
     def __actualize_total_tasks(self) -> None:
         """Actualiza el total de las tareas"""
         try:
+            # current_stage solo es para acortar la siguiente línea
             current_stage = self.current_stage
             self.list_tasks = self.list_stages[current_stage].query(Task)
             self.total_tasks = len(self.list_tasks) - 1
         except IndexError:
             pass
+
+    def action_delete_task(self) -> None:
+        """Delete task from stage"""
+
+        def check_delete_task(delete_task: bool) -> None:
+            """Called when DeleteTask is dismissed"""
+            if delete_task:
+                if len(self.list_tasks) > 0:
+                    self.list_tasks[self.current_task].remove()
+                    # actualizar self.total_tasks
+                    self.__actualize_total_tasks()
+
+                    if self.current_task == self.total_tasks + 1:
+                        self.current_task = self.total_tasks
+
+                    # resaltar la nueva tarea y hacer scroll
+                    self.__select_task()
+
+        self.push_screen("delete_task", check_delete_task)
 
     def action_mark_as_done(self) -> None:
         """Send task to last stage"""
@@ -181,6 +204,7 @@ class KanbanUltimate(App):
             # actualizar self.total_tasks y self.current_task
 
             self.__actualize_total_tasks()
+
             if self.current_task == self.total_tasks + 1:
                 self.current_task = self.total_tasks
 

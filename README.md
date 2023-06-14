@@ -1,17 +1,21 @@
 ## ToDo
 
+- TODO: preguntar antes de borrar la tarea
+- TODO: Agregar tareas
+- TODO: Duplicar tareas
+- DONE: Borrar tareas
+- DONE: Enviar tareas a la última columna
 - Operaciones en archivo
-  - DONE: Convertir html a markdown al grabar
-  - DONE: Grabar el archivo a disco
-- Tareas
-  - TODO: Agregar tareas
-    - TODO: Agregar sub tareas
-  - TODO: Borrar tareas
-  - DONE: Enviar tareas a la última columna
-  - TODO: Duplicar tareas
-  - TODO: Crear un color nuevo para la última columna
-- Quizás
-  - DONE: Cambiar Task al widget Input
+    - DONE: Convertir html a markdown al grabar
+    - DONE: Grabar el archivo a disco
+
+
+## Quizás
+
+- TODO: Agregar sub tareas
+- TODO: Crear un color nuevo para la última columna
+- TODO: Seleccionar tareas con click del ratón
+- DONE: Cambiar Task al widget Input
 - DONE: Filtrar los archivos por extensión.
 - DONE: de Markdown a html
 - DONE: del html extraer la info con beautifulsoup
@@ -30,4 +34,3 @@
   la última tarea
 - DONE: al mover una tarea hacia la primer columna, si se tiene que hacer
   scroll, una vez se hace correctamente, y otra no
-- TODO: Seleccionar tareas con click del ratón
