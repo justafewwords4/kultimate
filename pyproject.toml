@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "kultimate"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Felipe <104157442+justafewwords4@users.noreply.github.com>"]
 readme = "README.md"
