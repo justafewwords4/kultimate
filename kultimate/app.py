@@ -5,7 +5,7 @@ from textual.css.query import QueryError
 from textual.reactive import var
 from textual.widgets import Footer, Header
 
-from .screens import DeleteTask
+from .screens import AddTask, DeleteTask
 from .utils import ParserMarkdown, StagesToMarkdown
 from .widgets import Directory, Stage, StagesContainer, Task
 
@@ -18,13 +18,14 @@ class KanbanUltimate(App):
     TITLE = "KUltimate"
     SUB_TITLE = "Using Kanban with Markdown"
     CSS_PATH = "app.css"
-    SCREENS = {"delete_task": DeleteTask}
+    SCREENS = {"delete_task": DeleteTask, "add_task": AddTask}
 
     BINDINGS = [
         ("s", "select_file", "Select File"),
         # opción temporal, el archivo se debe guardar
         # cada que se modifique el contenido
         ("g", "save_file", "Save File"),
+        ("o", "add_task", "Add Task"),
         ("ctrl+l", "mark_as_done", "Mark as Done"),
         ("ctrl+d", "delete_task", "Delete Task"),
         ("q", "quit", "Quit"),
@@ -171,6 +172,25 @@ class KanbanUltimate(App):
             self.total_tasks = len(self.list_tasks) - 1
         except IndexError:
             pass
+
+    def action_add_task(self) -> None:
+        """Add new task"""
+
+        def get_value_from_input(text_for_new_task: str) -> None:
+            """Obtiene el valor de la tarea"""
+            if text_for_new_task != "":
+                # realizar las operaciones necesarias para agregar la tarea
+                # ¿Dónde montar la nueva tarea? ¿Al principio? ¿Al final?
+                # ¿En la primer columna?
+                # Montar la tarea en la columna actual
+                new_task = Task(text_for_new_task)
+                self.list_stages[self.current_stage].mount(new_task)
+                old_task = self.current_task
+                self.__actualize_total_tasks()
+                self.current_task = self.total_tasks
+                self.__new_active_task(old_task)
+
+        self.push_screen("add_task", get_value_from_input)
 
     def action_delete_task(self) -> None:
         """Delete task from stage"""

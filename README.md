@@ -1,13 +1,13 @@
 ## ToDo
 
-- TODO: Agregar tareas
+- TODO: Grabar a disco
+- DONE: Agregar tareas
 - DONE: preguntar antes de borrar la tarea
 - DONE: Borrar tareas
 - DONE: Enviar tareas a la última columna
 - Operaciones en archivo
-    - DONE: Convertir html a markdown al grabar
-    - DONE: Grabar el archivo a disco
-
+  - DONE: Convertir html a markdown al grabar
+  - DONE: Grabar el archivo a disco
 
 ## Quizás
 
