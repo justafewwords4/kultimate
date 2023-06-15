@@ -33,10 +33,10 @@ class KanbanUltimate(App):
         ("h, left", "go_to_left"),
         ("j, down", "go_to_down"),
         ("k, up", "go_to_up"),
-        ("J, s+down", "move_down"),  # DONE: Guardar archivo
-        ("K, s+up", "move_up"),  # DONE: Guardar archivo
-        ("H, s+left", "move_left"),  # DONE: Guardar archivo
-        ("L, s+right", "move_right"),  # DONE: Guardar archivo
+        ("J, shift+down", "move_down"),  # DONE: Guardar archivo
+        ("K, shift+up", "move_up"),  # DONE: Guardar archivo
+        ("H, shift+left", "move_left"),  # DONE: Guardar archivo
+        ("L, shift+right", "move_right"),  # DONE: Guardar archivo
     ]
 
     home_user = Path.home()

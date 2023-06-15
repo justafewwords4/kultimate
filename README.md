@@ -17,24 +17,26 @@ Trabajo en progreso
 
 ## Uso
 
-|        | Teclas para operar la aplicación              |
-| ------ | --------------------------------------------- |
-| j      | ir a la tarea de abajo                        |
-| k      | ir a la tarea de arriba                       |
-| l      | ir a la columna de la derecha                 |
-| h      | ir a la columna de la izquierda               |
-| J      | Llevar la tarea hacia arriba                  |
-| K      | Llevar la tarea hacia abajo                   |
-| L      | Cambiar la tarea a la columna de la derecha   |
-| H      | Cambiar la tarea a la columna de la izquierda |
-| s      | Seleccionar un archivo para abrirlo           |
-| o      | Agregar tarea al final de la columna actual   |
-| ctrl+l | Mueve la tarea a la última columna            |
-| ctrl+d | Borra la tarea seleccionada                   |
-| q      | Salir de la aplicación                        |
+|                     | Teclas para operar la aplicación              |
+| ------------------- | --------------------------------------------- |
+| j, flecha abajo     | ir a la tarea de abajo                        |
+| k, flecha arriba    | ir a la tarea de arriba                       |
+| l, flecha izquierda | ir a la columna de la derecha                 |
+| h, flecha derecha   | ir a la columna de la izquierda               |
+| J                   | Llevar la tarea hacia arriba                  |
+| K                   | Llevar la tarea hacia abajo                   |
+| L                   | Cambiar la tarea a la columna de la derecha   |
+| H                   | Cambiar la tarea a la columna de la izquierda |
+| s                   | Seleccionar un archivo para abrirlo           |
+| o                   | Agregar tarea al final de la columna actual   |
+| ctrl+l              | Mueve la tarea a la última columna            |
+| ctrl+d              | Borra la tarea seleccionada                   |
+| q                   | Salir de la aplicación                        |
 
 ## ToDo
 
+- FIXME: Al mover las tareas entre columnas visualmente se ve bien, pero al
+  grabar a disco se queda en todas las columnas por donde pasa.
 - TODO: Rehacer la configuración de la aplicación.
 - TODO: Hacer esqueleto para crear los nuevos archivos.
 - TODO: Crear nuevo archivo.
