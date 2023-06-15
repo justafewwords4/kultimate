@@ -13,6 +13,8 @@ pip install kultimate
 
 ## Configuración
 
+Trabajo en progreso
+
 ## Uso
 
 |        | Teclas para operar la aplicación              |
