@@ -11,9 +11,29 @@ Programado con [textual](https://textual.textualize.io/).
 pip install kultimate
 ```
 
+## Configuración
+
+## Uso
+
+|        | Teclas para operar la aplicación              |
+| ------ | --------------------------------------------- |
+| j      | ir a la tarea de abajo                        |
+| k      | ir a la tarea de arriba                       |
+| l      | ir a la columna de la derecha                 |
+| h      | ir a la columna de la izquierda               |
+| J      | Llevar la tarea hacia arriba                  |
+| K      | Llevar la tarea hacia abajo                   |
+| L      | Cambiar la tarea a la columna de la derecha   |
+| H      | Cambiar la tarea a la columna de la izquierda |
+| s      | Seleccionar un archivo para abrirlo           |
+| o      | Agregar tarea al final de la columna actual   |
+| ctrl+l | Mueve la tarea a la última columna            |
+| ctrl+d | Borra la tarea seleccionada                   |
+| q      | Salir de la aplicación                        |
+
 ## ToDo
 
-- TODO: Crear archivo
+- TODO: Crear nuevo archivo
 - TODO: Si no existe directorio pedirlo
 - TODO: Agregar columnas
 - TODO: Mover columnas
