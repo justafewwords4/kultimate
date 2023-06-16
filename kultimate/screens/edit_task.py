@@ -4,27 +4,29 @@ from textual.screen import ModalScreen
 from textual.widgets import Input
 
 
-class AddTask(ModalScreen[str]):
-    """Screen with a dialog to return yes or not"""
+class EditTask(ModalScreen[str]):
+    """Screen with a dialog for edit tasks"""
 
     BINDINGS = [
         ("escape", "exit", ""),
     ]
 
+    def set_text(self, task_text: str) -> None:
+        self.task_text = task_text
+
     def compose(self) -> ComposeResult:
         """Formar la pantalla"""
         yield Grid(
             Input(
-                value="",
-                placeholder="Write the new task",
+                value=self.task_text,
                 id="question",
             ),
             id="dialog",
         )
 
     def action_exit(self) -> None:
-        """Salir"""
-        self.dismiss("")
+        """Salir sin modificar la tarea"""
+        self.dismiss(self.task_text)
 
     def on_input_submitted(self, event: Input.Submitted) -> None:
         the_text = event.input.value
@@ -32,4 +34,4 @@ class AddTask(ModalScreen[str]):
         if event.input.id == "question":
             self.dismiss(the_text)
         else:
-            self.dismiss("")
+            self.dismiss(self.task_text)

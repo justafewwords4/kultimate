@@ -58,7 +58,7 @@ Task {
   background: $warning-lighten-1;
 }
 
-DeleteTask, AddTask, SelectAFile {
+DeleteTask, AddTask, SelectAFile, EditTask {
   align: center middle;
 }
 

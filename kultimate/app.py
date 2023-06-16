@@ -5,7 +5,7 @@ from textual.css.query import QueryError
 from textual.reactive import var
 from textual.widgets import Footer, Header
 
-from .screens import AddTask, DeleteTask, SelectAFile
+from .screens import AddTask, DeleteTask, EditTask, SelectAFile
 from .utils import ParserMarkdown, StagesToMarkdown
 from .widgets import Directory, Stage, StagesContainer, Task
 
@@ -22,6 +22,7 @@ class KanbanUltimate(App):
         "delete_task": DeleteTask,
         "add_task": AddTask,
         "select_file": SelectAFile,
+        "edit_task": EditTask,
     }
 
     BINDINGS = [
@@ -29,6 +30,7 @@ class KanbanUltimate(App):
         # opción temporal, el archivo se debe guardar
         # cada que se modifique el contenido
         ("o", "add_task", "Add Task"),  # DONE: Guardar archivo
+        ("e", "edit_task", "Edit Task"),  # DONE: Guardar archivo
         ("ctrl+l", "mark_as_done", "Mark as Done"),  # DONE: Guardar archivo
         ("ctrl+d", "delete_task", "Delete Task"),  # DONE: Guardar archivo
         ("q", "quit", "Quit"),
@@ -137,14 +139,14 @@ class KanbanUltimate(App):
         except IndexError:
             pass
 
-    def __remove_class_for_active_task(self, current_task: int) -> None:
-        """Add class self.class_for_active_task"""
-        try:
-            self.list_tasks[current_task].remove_class(
-                self.class_for_active_task,
-            )
-        except IndexError:
-            pass
+    # def __remove_class_for_active_task(self, current_task: int) -> None:
+    #     """Add class self.class_for_active_task"""
+    #     try:
+    #         self.list_tasks[current_task].remove_class(
+    #             self.class_for_active_task,
+    #         )
+    #     except IndexError:
+    #         pass
 
     def __add_class_for_active_stage(self, stage: int) -> None:
         """Add class self.class_for_active_stage"""
@@ -252,6 +254,21 @@ class KanbanUltimate(App):
             self.push_screen("add_task", get_value_from_input)
         else:
             self.push_screen("select_file")
+
+    def action_edit_task(self) -> None:
+        """Edit self.current_task"""
+
+        def new_value_for_task(new_text_for_task: str) -> None:
+            """Obtiene el valor de la tarea"""
+            self.list_tasks[self.current_task].update(new_text_for_task)
+            # guardar al archivo
+            self.__save_to_file()
+
+        if self.actual_file:
+            task_text = str(self.list_tasks[self.current_task].renderable)
+            screen_edit = EditTask()
+            screen_edit.set_text(task_text)
+            self.push_screen(screen_edit, new_value_for_task)
 
     def action_delete_task(self) -> None:
         """Delete task from stage"""
