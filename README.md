@@ -35,9 +35,6 @@ Trabajo en progreso
 
 ## ToDo
 
-- TODO: Editar tareas
-- DONE: Al mover las tareas entre columnas visualmente se ve bien, pero al
-  grabar a disco se queda en todas las columnas por donde pasa.
 - TODO: Reducir el tamaño de la caja para capturar las tareas.
 - TODO: Rehacer la configuración de la aplicación.
 - TODO: Hacer esqueleto para crear los nuevos archivos.
@@ -45,6 +42,9 @@ Trabajo en progreso
 - TODO: Si no existe directorio pedirlo.
 - TODO: Agregar columnas.
 - TODO: Mover columnas.
+- DONE: Editar tareas
+- DONE: Al mover las tareas entre columnas visualmente se ve bien, pero al
+  grabar a disco se queda en todas las columnas por donde pasa.
 - DONE: Grabar a disco.
 - DONE: Agregar tareas.
 - DONE: preguntar antes de borrar la tarea.
