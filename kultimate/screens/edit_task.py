@@ -21,7 +21,7 @@ class EditTask(ModalScreen[str]):
                 value=self.task_text,
                 id="question",
             ),
-            id="dialog",
+            id="edit_task",
         )
 
     def action_exit(self) -> None:

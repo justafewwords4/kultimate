@@ -19,7 +19,7 @@ class AddTask(ModalScreen[str]):
                 placeholder="Write the new task",
                 id="question",
             ),
-            id="dialog",
+            id="add_task",
         )
 
     def action_exit(self) -> None:

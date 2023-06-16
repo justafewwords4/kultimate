@@ -35,47 +35,47 @@ Trabajo en progreso
 
 ## ToDo
 
-- TODO: Reducir el tamaño de la caja para capturar las tareas.
-- TODO: Rehacer la configuración de la aplicación.
-- TODO: Hacer esqueleto para crear los nuevos archivos.
-- TODO: Crear nuevo archivo.
-- TODO: Si no existe directorio pedirlo.
-- TODO: Agregar columnas.
-- TODO: Mover columnas.
-- DONE: Editar tareas
-- DONE: Al mover las tareas entre columnas visualmente se ve bien, pero al
+- [ ] TODO: Rehacer la configuración de la aplicación.
+- [ ] TODO: Si no existe directorio pedirlo.
+- [ ] TODO: Hacer esqueleto para crear los nuevos archivos.
+- [ ] TODO: Crear nuevo archivo.
+- [ ] TODO: Agregar columnas.
+- [X] DONE: Reducir el tamaño de la caja para capturar las tareas.
+- [X] DONE: Editar tareas
+- [X] DONE: Al mover las tareas entre columnas visualmente se ve bien, pero al
   grabar a disco se queda en todas las columnas por donde pasa.
-- DONE: Grabar a disco.
-- DONE: Agregar tareas.
-- DONE: preguntar antes de borrar la tarea.
-- DONE: Borrar tareas.
-- DONE: Enviar tareas a la última columna.
+- [X] DONE: Grabar a disco.
+- [X] DONE: Agregar tareas.
+- [X] DONE: preguntar antes de borrar la tarea.
+- [X] DONE: Borrar tareas.
+- [X] DONE: Enviar tareas a la última columna.
 - Operaciones en archivo.
-  - DONE: Convertir html a markdown al grabar.
-  - DONE: Grabar el archivo a disco.
+  - [X] DONE: Convertir html a markdown al grabar.
+  - [X] DONE: Grabar el archivo a disco.
 
 ## Quizás
 
-- TODO: Duplicar tareas.
-- TODO: Agregar sub tareas.
-- TODO: Crear un color nuevo para la última columna.
-- TODO: Seleccionar tareas con click del ratón.
-- DONE: Cambiar Task al widget Input.
-- DONE: Filtrar los archivos por extensión..
-- DONE: de Markdown a html.
-- DONE: del html extraer la info con beautifulsoup.
-- DONE: Que aparezca el nombre del archivo en la cabecera de la aplicación.
-- DONE: Crear las columnas al cambiar de archivo usar mount y remove.
-- DONE: ¿Por qué se "dispara" el scroll horizontal, si no estoy agregando.
+- [ ] TODO: Mover columnas.
+- [ ] TODO: Duplicar tareas.
+- [ ] TODO: Agregar sub tareas.
+- [ ] TODO: Crear un color nuevo para la última columna.
+- [ ] TODO: Seleccionar tareas con click del ratón.
+- [X] DONE: Cambiar Task al widget Input.
+- [X] DONE: Filtrar los archivos por extensión..
+- [X] DONE: de Markdown a html.
+- [X] DONE: del html extraer la info con beautifulsoup.
+- [X] DONE: Que aparezca el nombre del archivo en la cabecera de la aplicación.
+- [X] DONE: Crear las columnas al cambiar de archivo usar mount y remove.
+- [X] DONE: ¿Por qué se "dispara" el scroll horizontal, si no estoy agregando.
   nuevos elementos? R: Cada que se cargaba un nuevo archivo se montaba un.
   StageContainer por cada columna.
-- DONE: Al cambiar a una columna sin tareas se truena el programa.
-- DONE: Primero debo corregir lo del foco al cargar el archivo.
-- DONE: No funciona al presionar la primera H, hasta la segunda. En realidad no
+- [X] DONE: Al cambiar a una columna sin tareas se truena el programa.
+- [X] DONE: Primero debo corregir lo del foco al cargar el archivo.
+- [X] DONE: No funciona al presionar la primera H, hasta la segunda. En realidad no
   funciona la primera tecla.
-- DONE: En general no detecta la primera letra que se presiona al seleccionar
+- [X] DONE: En general no detecta la primera letra que se presiona al seleccionar
   un archivo.
-- DONE: al presionar primero la tecla k (go_to_up) no se mueve correctamente a
+- [X] DONE: al presionar primero la tecla k (go_to_up) no se mueve correctamente a
   la última tarea.
-- DONE: al mover una tarea hacia la primer columna, si se tiene que hacer
+- [X] DONE: al mover una tarea hacia la primer columna, si se tiene que hacer
   scroll, una vez se hace correctamente, y otra no.
