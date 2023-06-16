@@ -37,6 +37,7 @@ Trabajo en progreso
 
 - FIXME: Al mover las tareas entre columnas visualmente se ve bien, pero al
   grabar a disco se queda en todas las columnas por donde pasa.
+- TODO: Reducir el tamaño de la caja para capturar las tareas.
 - TODO: Rehacer la configuración de la aplicación.
 - TODO: Hacer esqueleto para crear los nuevos archivos.
 - TODO: Crear nuevo archivo.

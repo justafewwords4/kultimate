@@ -51,8 +51,8 @@ class StagesToMarkdown:
             try:
                 tasks = stage.query(Task)
                 for task in tasks:
-                    texto = task.render()
-                    self.markdown_text += f"- {texto.markup}\n"
+                    # texto = task.render()
+                    self.markdown_text += f"- {task.renderable}\n"
             except QueryError:
                 pass
 

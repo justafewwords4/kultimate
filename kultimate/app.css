@@ -58,7 +58,7 @@ Task {
   background: $warning-lighten-1;
 }
 
-DeleteTask, AddTask {
+DeleteTask, AddTask, SelectAFile {
   align: center middle;
 }
 
@@ -80,6 +80,9 @@ DeleteTask, AddTask {
   content-align: center middle;
 }
 
+
 Button {
   width: 100%;
+  align: center middle;
+  content-align: center middle;
 }
