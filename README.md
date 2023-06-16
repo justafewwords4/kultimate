@@ -35,11 +35,10 @@ Trabajo en progreso
 
 ## ToDo
 
-- [ ] TODO: Rehacer la configuración de la aplicación.
-- [ ] TODO: Si no existe directorio pedirlo.
-- [ ] TODO: Hacer esqueleto para crear los nuevos archivos.
-- [ ] TODO: Crear nuevo archivo.
-- [ ] TODO: Agregar columnas.
+- [ ] TODO: Crear nuevo archivo. Usar el esqueleto creado en el archivo de configuración
+- [X] DONE: Rehacer la configuración de la aplicación.
+- [X] DONE: Hacer esqueleto para crear los nuevos archivos.
+- [X] DONE: Si no existe directorio crearlo.
 - [X] DONE: Reducir el tamaño de la caja para capturar las tareas.
 - [X] DONE: Editar tareas
 - [X] DONE: Al mover las tareas entre columnas visualmente se ve bien, pero al
@@ -55,6 +54,7 @@ Trabajo en progreso
 
 ## Quizás
 
+- [ ] TODO: Agregar columnas.
 - [ ] TODO: Mover columnas.
 - [ ] TODO: Duplicar tareas.
 - [ ] TODO: Agregar sub tareas.

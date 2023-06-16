@@ -1,3 +1,4 @@
+import os
 import sys
 from configparser import ConfigParser
 from os.path import exists
@@ -16,12 +17,17 @@ app = typer.Typer()
 
 user_home_directory = Path.home()
 path_file_config = f"{user_home_directory}/.kultimate.ini"
-print(path_file_config)
 
 config_object = ConfigParser()
 default_config = ConfigParser()
+
 default_config["WORKING_DIRECTORY"] = {
     "path": f"{user_home_directory}/kultimate",
+}
+
+default_config["SKELETONS"] = {
+    "three_stages": ["ToDo", "Doing", "Done"],
+    "five_stages": ["BackLog", "ToDo", "Doing", "Waiting", "Done"],
 }
 
 
@@ -31,14 +37,21 @@ def check_directory(path: str) -> None:
     if working_directory_exists:
         main(path)
     else:
-        print(f"Directory {path} not exists")
-        print(f"Change 'path' on {path_file_config}")
-        sys.exit(1)
+        print(f"Directory '{path}' not exists")
+        print(f"Change 'path' on '{path_file_config}'")
+        print(f"Creating directory '{path}'")
+        try:
+            os.makedirs(path)
+            main(path)
+        except PermissionError:
+            print("PermissionError")
+            print(f"'{path}' not created.")
+            sys.exit(1)
 
 
-@app.command()
+@app.callback(invoke_without_command=True)
 def init(path: str = ""):
-    """Verifica que exista el archivo de configuración"""
+    """Launch kanban ultimate for markdown"""
     file_config_exists = exists(path_file_config)
 
     if path:
