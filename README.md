@@ -9,8 +9,6 @@ Programado con [textual](https://textual.textualize.io/).
 
 `python = "^3.10"`
 
-Se ha probado en Linux, y tal vez funcione en MacOS.
-
 ## Instalación
 
 ```sh
@@ -41,6 +39,7 @@ Trabajo en progreso
 
 ## ToDo
 
+- [ ] TODO: Marcar tareas importantes
 - [x] DONE: Crear nuevo archivo. Usar el esqueleto creado en el archivo de configuración
 - [x] DONE: Rehacer la configuración de la aplicación.
 - [x] DONE: Hacer esqueleto para crear los nuevos archivos.
@@ -60,7 +59,6 @@ Trabajo en progreso
 
 ## Quizás
 
-- [ ] TODO: Marcar tareas importantes
 - [ ] TODO: Agregar columnas.
 - [ ] TODO: Mover columnas.
 - [ ] TODO: Duplicar tareas.

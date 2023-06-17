@@ -39,6 +39,7 @@ class KanbanUltimate(App):
         ("q", "quit", "Quit"),
         # inician las teclas sin leyendas
         ("l, right", "go_to_right"),
+        ("l, right", "go_to_right"),
         ("h, left", "go_to_left"),
         ("j, down", "go_to_down"),
         ("k, up", "go_to_up"),
