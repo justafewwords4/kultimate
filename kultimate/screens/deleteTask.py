@@ -9,15 +9,15 @@ class DeleteTask(ModalScreen[bool]):
 
     BINDINGS = [
         ("y", "say_yes", ""),
-        ("n", "say_no", ""),
+        ("c", "say_no", ""),
     ]
 
     def compose(self) -> ComposeResult:
         """Formar la pantalla"""
         yield Grid(
             Label(f"Delete task?", id="question"),
-            Button("Yes", variant="error", id="yes"),
-            Button("Cancel", variant="primary", id="cancel"),
+            Button("(Y)es", variant="error", id="yes"),
+            Button("(C)ancel", variant="primary", id="cancel"),
             id="dialog",
         )
 
