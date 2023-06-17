@@ -12,12 +12,7 @@ def create_new_markdown_file(directory: str, dictio: dict) -> bool:
     """Create a new markdown directory on directory"""
 
     if not dictio["name_file"]:
-        with open("/home/felipe/no_file.txt", "w") as ff:
-            ff.write("no file")
         return False
-
-    with open("/home/felipe/no_file.txt", "w") as ff:
-        ff.write(f"{directory}/{dictio['name_file']}\n")
 
     file_config_exists = exists(path_file_config)
 

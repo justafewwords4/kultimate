@@ -5,7 +5,13 @@
 Aplicación CLI Python para manejar archivos markdown como tableros Kanban.
 Programado con [textual](https://textual.textualize.io/).
 
-# Instalación
+## Requerimientos
+
+`python = "^3.10"`
+
+Se ha probado en Linux, y tal vez funcione en MacOS.
+
+## Instalación
 
 ```sh
 pip install kultimate
@@ -35,7 +41,7 @@ Trabajo en progreso
 
 ## ToDo
 
-- [ ] TODO: Crear nuevo archivo. Usar el esqueleto creado en el archivo de configuración
+- [x] DONE: Crear nuevo archivo. Usar el esqueleto creado en el archivo de configuración
 - [x] DONE: Rehacer la configuración de la aplicación.
 - [x] DONE: Hacer esqueleto para crear los nuevos archivos.
 - [x] DONE: Si no existe directorio crearlo.

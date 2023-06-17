@@ -604,8 +604,7 @@ class KanbanUltimate(App):
             self.__focus_task()
 
         except IndexError:
-            with open("/home/felipe/Dropbox/kanban3/nel.txt", "w") as ff:
-                ff.write("nel")
+            pass
 
     # DONE: Seleccionar un archivo para mostrar.
     # File selected
