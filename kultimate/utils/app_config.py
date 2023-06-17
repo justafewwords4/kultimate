@@ -22,11 +22,6 @@ default_config["WORKING_DIRECTORY"] = {
     "path": f"{user_home_directory}/kultimate",
 }
 
-default_config["SKELETONS"] = {
-    "three_stages": ["ToDo", "Doing", "Done"],
-    "five_stages": ["BackLog", "ToDo", "Doing", "Waiting", "Done"],
-}
-
 
 def check_directory(path: str) -> None:
     """Verifica si existe el directorio, si no, sale del programa"""

@@ -36,6 +36,7 @@ class CreateFile(ModalScreen[dict]):
     def on_radio_set_changed(self, event: RadioSet.Changed) -> None:
         el_input = self.query_one(Input)
         name_file = el_input.value
+        el_input.value = ""
         index = event.radio_set.pressed_index
         self.dismiss({"name_file": name_file, "columns": index})
 

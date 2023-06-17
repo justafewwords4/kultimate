@@ -1,11 +1,11 @@
-import json
-from configparser import ConfigParser
+# import json
+# from configparser import ConfigParser
 from os.path import exists
 from pathlib import Path
 
 user_home_directory = Path.home()
 path_file_config = f"{user_home_directory}/.kultimate.ini"
-config_object = ConfigParser()
+# config_object = ConfigParser()
 
 
 def create_new_markdown_file(directory: str, dictio: dict) -> bool:
@@ -14,24 +14,24 @@ def create_new_markdown_file(directory: str, dictio: dict) -> bool:
     if not dictio["name_file"]:
         return False
 
-    file_config_exists = exists(path_file_config)
+    # file_config_exists = exists(path_file_config)
 
     stages_three = ["ToDo", "Doing", "Done"]
     stages_five = ["BackLog", "ToDo", "Doing", "Waiting", "Done"]
 
-    if file_config_exists:
-        config_object.read(path_file_config)
+    # if file_config_exists:
+    #     config_object.read(path_file_config)
 
-        if "SKELETONS" in config_object:
-            try:
-                stages_three = json.loads(
-                    config_object.get("SKELETONS", "three_stages"),
-                )
-                stages_five = json.loads(
-                    config_object.get("SKELETONS", "five_stages"),
-                )
-            except IndexError:
-                pass
+    #     if "SKELETONS" in config_object:
+    #         try:
+    #             stages_three = json.loads(
+    #                 config_object.get("SKELETONS", "three_stages"),
+    #             )
+    #             stages_five = json.loads(
+    #                 config_object.get("SKELETONS", "five_stages"),
+    #             )
+    #         except IndexError:
+    #             pass
 
     name_file = dictio["name_file"]
     if not name_file.endswith(".md"):
