@@ -2,11 +2,11 @@ import os
 import sys
 from configparser import ConfigParser
 from os.path import exists
-from pathlib import Path
 
 import typer
 from rich import print
 
+from .. import config_object, path_file_config, user_home_directory
 from ..app import main
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
@@ -15,10 +15,7 @@ app = typer.Typer(context_settings=CONTEXT_SETTINGS, no_args_is_help=True)
 
 app = typer.Typer()
 
-user_home_directory = Path.home()
-path_file_config = f"{user_home_directory}/.kultimate.ini"
 
-config_object = ConfigParser()
 default_config = ConfigParser()
 
 default_config["WORKING_DIRECTORY"] = {

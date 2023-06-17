@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 
 from textual.app import App, ComposeResult
@@ -5,8 +6,8 @@ from textual.css.query import QueryError
 from textual.reactive import var
 from textual.widgets import Footer, Header
 
-from .screens import AddTask, DeleteTask, EditTask, SelectAFile
-from .utils import ParserMarkdown, StagesToMarkdown
+from .screens import AddTask, CreateFile, DeleteTask, EditTask, SelectAFile
+from .utils import ParserMarkdown, StagesToMarkdown, create_new_markdown_file
 from .widgets import Directory, Stage, StagesContainer, Task
 
 # DONE: Hay errores al navegar entre las columnas.
@@ -23,6 +24,7 @@ class KanbanUltimate(App):
         "add_task": AddTask,
         "select_file": SelectAFile,
         "edit_task": EditTask,
+        "create_file": CreateFile,
     }
 
     BINDINGS = [
@@ -33,6 +35,7 @@ class KanbanUltimate(App):
         ("e", "edit_task", "Edit Task"),  # DONE: Guardar archivo
         ("ctrl+l", "mark_as_done", "Mark as Done"),  # DONE: Guardar archivo
         ("ctrl+d", "delete_task", "Delete Task"),  # DONE: Guardar archivo
+        ("ctrl+n", "new_file", "Create New File"),  # DONE: Guardar archivo
         ("q", "quit", "Quit"),
         # inician las teclas sin leyendas
         ("l, right", "go_to_right"),
@@ -64,14 +67,14 @@ class KanbanUltimate(App):
 
     def __init__(self, path: str) -> None:
         """init kultimate"""
-        self.home_directory = path
+        self.kanban_directory = path
         self.SUB_TITLE = path
         super().__init__()
 
     def compose(self) -> ComposeResult:
         yield Header()
         with StagesContainer(id="stages_container"):
-            yield Directory(self.home_directory, id="directory")
+            yield Directory(self.kanban_directory, id="directory")
         yield Footer()
 
     def __new_active_task(self, old_task) -> None:
@@ -291,6 +294,20 @@ class KanbanUltimate(App):
                     self.__save_to_file()
 
         self.push_screen("delete_task", check_delete_task)
+
+    def action_new_file(self) -> None:
+        """Create a new file on directory"""
+
+        async def create_new_file(dictio: dict) -> None:
+            """Function to create a new file"""
+            create_new_markdown_file(self.kanban_directory, dictio)
+            try:
+                directory = self.query_one(Directory)
+                directory.reload()
+            except QueryError:
+                sys.exit(1)
+
+        self.push_screen("create_file", create_new_file)
 
     async def action_mark_as_done(self) -> None:
         """Send task to last stage"""
