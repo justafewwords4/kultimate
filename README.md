@@ -23,6 +23,7 @@ Trabajo en progreso
 
 |                     | Teclas para operar la aplicación              |
 | ------------------- | --------------------------------------------- |
+| ¡                   | Marcar/desmarcar tarea como importante        |
 | j, flecha abajo     | ir a la tarea de abajo                        |
 | k, flecha arriba    | ir a la tarea de arriba                       |
 | l, flecha izquierda | ir a la columna de la derecha                 |
