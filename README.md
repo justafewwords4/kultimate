@@ -40,6 +40,9 @@ Trabajo en progreso
 ## ToDo
 
 - [ ] TODO: Marcar tareas importantes
+- [ ] TODO: Al cargar las tareas, agregar clase de importante si la marca está
+      presente
+- [ ] TODO: Copiar tareas al portapapeles
 - [x] DONE: Crear nuevo archivo. Usar el esqueleto creado en el archivo de configuración
 - [x] DONE: Rehacer la configuración de la aplicación.
 - [x] DONE: Hacer esqueleto para crear los nuevos archivos.

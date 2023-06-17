@@ -7,7 +7,7 @@ from textual.reactive import var
 from textual.widgets import Footer, Header
 
 from .screens import AddTask, CreateFile, DeleteTask, EditTask, SelectAFile
-from .utils import ParserMarkdown, StagesToMarkdown, create_new_markdown_file
+from .utils import MarkTask, ParserMarkdown, StagesToMarkdown, create_new_markdown_file
 from .widgets import Directory, Stage, StagesContainer, Task
 
 # DONE: Hay errores al navegar entre las columnas.
@@ -38,7 +38,7 @@ class KanbanUltimate(App):
         ("ctrl+n", "new_file", "Create New File"),  # DONE: Guardar archivo
         ("q", "quit", "Quit"),
         # inician las teclas sin leyendas
-        ("l, right", "go_to_right"),
+        ("¡", "mark_as_important"),
         ("l, right", "go_to_right"),
         ("h, left", "go_to_left"),
         ("j, down", "go_to_down"),
@@ -57,6 +57,7 @@ class KanbanUltimate(App):
     # Classes para la columna y la tarea activa
     class_for_active_stage = "_actual"
     class_for_active_task = "_active"
+    class_for_important_task = "_is_important"
     # Archivo md en el que se está trabajando
     actual_file = var("")
     # Variables para las tareas
@@ -413,6 +414,34 @@ class KanbanUltimate(App):
 
             self.__activate_stage(old_stage)
 
+    def action_mark_as_important(self) -> None:
+        """Marcar la tarea como importante"""
+        # Comprobar si existen tareas
+        try:
+            if not self.list_tasks:
+                return
+        except AttributeError:
+            return
+
+        # obtener el texto de la tarea
+        text_for_task = str(self.list_tasks[self.current_task].renderable)
+        # pasarla por MarkTask
+        the_task = MarkTask(text_for_task)
+        # actualizar la tarea
+        the_task.toggle()
+        self.list_tasks[self.current_task].update(the_task.line)
+        # doing
+        if the_task.is_important:
+            # si es importante, agregar la clase self.is_important
+            self.list_tasks[self.current_task].add_class(self.class_for_important_task)
+        else:
+            # si no lo es, quitar la clase self.is_important
+            self.list_tasks[self.current_task].remove_class(
+                self.class_for_important_task
+            )
+        # guardar a disco
+        self.__save_to_file()
+
     # DONE: Moverse entre tareas con j y k
     def action_go_to_down(self) -> None:
         """Ir a la tarea de abajo"""
@@ -588,6 +617,11 @@ class KanbanUltimate(App):
                 first_task = True
                 for task in board[stage]:
                     new_task = Task(task)
+                    # determinar si es una tarea importante
+                    important_task = MarkTask(task)
+                    if important_task.is_important:
+                        new_task.add_class(self.class_for_important_task)
+
                     await new_stage.mount(new_task)
                     # DONE: Que la primer tarea obtenga el foco
                     if index == 0 and first_task:
