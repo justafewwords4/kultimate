@@ -4,3 +4,4 @@ dist/
 .trunk/
 .pytest_cache/
 demo.yml
+.vscode/

@@ -300,9 +300,9 @@ class KanbanUltimate(App):
     def action_new_file(self) -> None:
         """Create a new file on directory"""
 
-        async def create_new_file(dictio: dict) -> None:
+        async def create_new_file(dictionary: dict) -> None:
             """Function to create a new file"""
-            create_new_markdown_file(self.kanban_directory, dictio)
+            create_new_markdown_file(self.kanban_directory, dictionary)
             try:
                 directory = self.query_one(Directory)
                 directory.reload()
@@ -430,7 +430,6 @@ class KanbanUltimate(App):
         # actualizar la tarea
         the_task.toggle()
         self.list_tasks[self.current_task].update(the_task.line)
-        # doing
         if the_task.is_important:
             # si es importante, agregar la clase self.is_important
             self.list_tasks[self.current_task].add_class(self.class_for_important_task)
@@ -472,20 +471,54 @@ class KanbanUltimate(App):
 
     def interchange_task(self, index) -> None:
         """Intercambia las tareas"""
+
+        if (
+            index == 0
+            and self.current_task == self.total_tasks
+            and self.total_tasks != 1
+        ):
+            return
+
+        if (
+            index == self.total_tasks
+            and self.current_task == 0
+            and self.total_tasks != 1
+        ):
+            return
+
         if index != self.current_task:
             try:
                 # quitar la clase a la tarea actual
                 self.__unselect_task()
 
+                # remover la clase self.class_for_important_task de ambas tareas
+                self.list_tasks[self.current_task].remove_class(
+                    self.class_for_important_task
+                )
+                self.list_tasks[index].remove_class(self.class_for_important_task)
+
                 # hacer el intercambio de contenido
-                actual_text = self.list_tasks[self.current_task].renderable
-                next_text = self.list_tasks[index].renderable
+                actual_text = str(self.list_tasks[self.current_task].renderable)
+                next_text = str(self.list_tasks[index].renderable)
 
                 self.list_tasks[self.current_task].update(next_text)
                 self.list_tasks[index].update(actual_text)
+                # doing
 
                 # establecer la nueva self.current_task
-                self.current_task = index
+                self.current_task, index = index, self.current_task
+                # si alguna tarea es importante añadir la clase
+                # next_text ahora tiene el texto de self.current_task
+                text_ = MarkTask(next_text)
+                if text_.is_important:
+                    self.list_tasks[index].add_class(self.class_for_important_task)
+                # actual_text ahora tiene el texto de index
+                text2_ = MarkTask(actual_text)
+                if text2_.is_important:
+                    self.list_tasks[self.current_task].add_class(
+                        self.class_for_important_task,
+                    )
+
                 # agregar la clase activa
                 self.__select_task()
             except IndexError:
@@ -493,9 +526,7 @@ class KanbanUltimate(App):
 
     def action_move_down(self) -> None:
         """Mover la tarea hacia abajo. Se presionó la tecla J"""
-        # usar index, la asignación ","
-        # DONE: Obtener el índice del elemento a mover
-        # obtener el lugar de la tarea en la lista
+
         index = self.current_task
         if index < self.total_tasks:
             index += 1
@@ -549,8 +580,13 @@ class KanbanUltimate(App):
             self.current_task = self.total_tasks
             # agregar self.class_for_active_task a la tarea agregada
             self.__add_class_for_active_task(self.current_task)
+            task_text = str(self.list_tasks[self.current_task].renderable)
+            task_ = MarkTask(task_text)
+            if task_.is_important:
+                self.list_tasks[self.current_task].add_class(
+                    self.class_for_important_task
+                )
             # actualizar self.list_tasks
-            pass
 
     async def action_move_left(self) -> None:
         """Mover la tarea a la columna de la izquierda. Se presionó H"""

@@ -65,7 +65,7 @@ Task.is_important {
 
 Stage > Task._is_important {
   color: $background-darken-3;
-  border: inner $error-darken-2;
+  border: inner $boost-lighten-3;
   background: $error-lighten-3;
 }
 
@@ -77,7 +77,7 @@ Stage > Task._is_important {
 
 ._actual > Task._is_important {
   color: $background-darken-3;
-  border: inner $error-darken-2;
+  border: inner $boost-lighten-3;
   background: $error-lighten-3;
 }
 
