@@ -44,7 +44,8 @@ Trabajo en progreso
 > En Linux se debe instalar xclip, xsel o wl-clipboard (para las sesiones en
 > wayland). Por ejemplo, en Debian:
 >
-> ```sudo apt-get install xclip
+> ```
+> sudo apt-get install xclip
 > sudo apt-get install xsel
 > sudo apt-get install wl-clipboard
 > ```
