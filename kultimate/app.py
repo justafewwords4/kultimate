@@ -313,30 +313,31 @@ class KanbanUltimate(App):
 
     async def action_mark_as_done(self) -> None:
         """Send task to last stage"""
-        if self.current_stage != self.total_stages:
-            if self.total_tasks == 0:
-                return
+        if self.current_stage == self.total_stages or self.total_tasks + 1 == 0:
+            # Si estamos en la última columna, no hay nada que hacer
+            # Si el total de tareas es cero, no hay nada que hacer
+            return
 
-            # copiar el texto de la tarea
-            text_task_done = self.list_tasks[self.current_task].renderable
-            # eliminar la tarea de la columna actual
-            await self.list_tasks[self.current_task].remove()
-            # actualizar self.total_tasks y self.current_task
+        # copiar el texto de la tarea
+        text_task_done = self.list_tasks[self.current_task].renderable
+        # eliminar la tarea de la columna actual
+        await self.list_tasks[self.current_task].remove()
+        # actualizar self.total_tasks y self.current_task
 
-            self.__actualize_total_tasks()
+        self.__actualize_total_tasks()
 
-            if self.current_task == self.total_tasks + 1:
-                self.current_task = self.total_tasks
+        if self.current_task == self.total_tasks + 1:
+            self.current_task = self.total_tasks
 
-            # resaltar la nueva tarea y hacer scroll
-            self.__select_task()
-            # crear una nueva tarea
-            task_done = Task(text_task_done)
-            # agregar a la última columna
-            self.list_stages[self.total_stages].mount(task_done)
+        # resaltar la nueva tarea y hacer scroll
+        self.__select_task()
+        # crear una nueva tarea
+        task_done = Task(text_task_done)
+        # agregar a la última columna
+        self.list_stages[self.total_stages].mount(task_done)
 
-            # guardar al archivo
-            self.__save_to_file()
+        # guardar al archivo
+        self.__save_to_file()
 
     def action_select_file(self) -> None:
         """Toggle class for Directory"""
