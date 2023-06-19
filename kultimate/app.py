@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 
+import pyperclip
 from textual.app import App, ComposeResult
 from textual.css.query import QueryError
 from textual.reactive import var
@@ -47,6 +48,7 @@ class KanbanUltimate(App):
         ("K, shift+up", "move_up"),  # DONE: Guardar archivo
         ("H, shift+left", "move_left"),  # DONE: Guardar archivo
         ("L, shift+right", "move_right"),  # DONE: Guardar archivo
+        ("ctrl+c", "copy_task_to_clipboard"),
     ]
 
     home_user = Path.home()
@@ -232,6 +234,14 @@ class KanbanUltimate(App):
             current_stage = self.current_stage
             self.list_tasks = self.list_stages[current_stage].query(Task)
             self.total_tasks = len(self.list_tasks) - 1
+        except IndexError:
+            pass
+
+    def action_copy_task_to_clipboard(self) -> None:
+        """Copia la tarea al portapapeles"""
+        try:
+            text_to_copy = str(self.list_tasks[self.current_task].renderable)
+            pyperclip.copy(text_to_copy)
         except IndexError:
             pass
 

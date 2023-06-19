@@ -36,16 +36,27 @@ Trabajo en progreso
 | o                   | Agregar tarea al final de la columna actual   |
 | ctrl+l              | Mueve la tarea a la última columna            |
 | ctrl+d              | Borra la tarea seleccionada                   |
+| ctrl+c (ver nota)   | Copiar la tarea al portapapeles               |
 | q                   | Salir de la aplicación                        |
+
+`Nota para la copia de tareas al portapaleles`:
+
+> En Linux se debe instalar xclip, xsel o wl-clipboard (para las sesiones en
+> wayland). Por ejemplo, en Debian:
+>
+> ```sudo apt-get install xclip
+> sudo apt-get install xsel
+> sudo apt-get install wl-clipboard
+> ```
 
 ## ToDo
 
-- [ ] TODO: Copiar tareas al portapapeles
 - [ ] TODO: Agregar recordatorios
 - [ ] TODO: Corregir uso de directorios
 - [ ] DONE: Al cambiar la última tarea con J, se intercambia con la primera.
       Quiero que solo se ponga encima. Hace lo mismo cuando se usa K en la
       primer tarea, se intercambia con la última.
+- [ ] DONE: Copiar tareas al portapapeles
 - [x] DONE: Corregir el uso de ctrl-l
 - [x] DONE: Marcar tareas importantes
 - [x] DONE: Al cargar las tareas, agregar clase de importante si la marca está
