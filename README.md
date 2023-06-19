@@ -40,7 +40,10 @@ Trabajo en progreso
 
 ## ToDo
 
+- [ ] FIXME: Corregir el uso de ctrl-l
 - [ ] TODO: Copiar tareas al portapapeles
+- [ ] TODO: Agregar recordatorios
+- [ ] TODO: Corregir uso de directorios
 - [ ] DONE: Al cambiar la última tarea con J, se intercambia con la primera.
       Quiero que solo se ponga encima. Hace lo mismo cuando se usa K en la
       primer tarea, se intercambia con la última.
