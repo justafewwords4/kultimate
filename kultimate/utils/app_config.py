@@ -11,9 +11,9 @@ from ..app import main
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
-app = typer.Typer(context_settings=CONTEXT_SETTINGS, no_args_is_help=True)
+# app = typer.Typer(context_settings=CONTEXT_SETTINGS, no_args_is_help=True)
 
-# app = typer.Typer()
+app = typer.Typer()
 
 
 default_config = ConfigParser()
