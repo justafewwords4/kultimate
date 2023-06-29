@@ -33,7 +33,7 @@ Trabajo en progreso
 | L                   | Cambiar la tarea a la columna de la derecha   |
 | H                   | Cambiar la tarea a la columna de la izquierda |
 | s                   | Seleccionar un archivo para abrirlo           |
-| o                   | Agregar tarea al final de la columna actual   |
+| a, i                | Agregar tarea al final de la columna actual   |
 | ctrl+l              | Mueve la tarea a la última columna            |
 | ctrl+d              | Borra la tarea seleccionada                   |
 | ctrl+c (ver nota)   | Copiar la tarea al portapapeles               |
