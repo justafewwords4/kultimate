@@ -32,7 +32,7 @@ class KanbanUltimate(App):
         ("s", "select_file", "Select File"),
         # opción temporal, el archivo se debe guardar
         # cada que se modifique el contenido
-        ("a", "add_task", "Add Task"),  # DONE: Guardar archivo
+        ("a, i", "add_task", "Add Task"),  # DONE: Guardar archivo
         ("e", "edit_task", "Edit Task"),  # DONE: Guardar archivo
         ("ctrl+l", "mark_as_done", "Mark as Done"),  # DONE: Guardar archivo
         ("ctrl+d", "delete_task", "Delete Task"),  # DONE: Guardar archivo
